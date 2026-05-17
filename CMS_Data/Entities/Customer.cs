@@ -1,4 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿/*Họ tên: Nguyễn Đình Lợi       
+ *MSSV: 2122110147
+ *Lớp: CCQ2211D
+ *Ngày tạo: 17/5/2026
+ *Mô tả: Lớp Customer đại diện cho một khách hàng trong hệ thống quản lý nội dung (CMS).
+ * 
+ */
+using System.ComponentModel.DataAnnotations;
 
 namespace CMS.Data.Entities
 {

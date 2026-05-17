@@ -9,57 +9,57 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = CMS_Backend
 build_property.RootNamespace = CMS_Backend
-build_property.ProjectDir = F:\LOI_ASP\CMS_Backend\
+build_property.ProjectDir = C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = F:\LOI_ASP\CMS_Backend
+build_property.MSBuildProjectDirectory = C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 8.0
 build_property.EnableCodeStyleSeverity = 
 
-[F:/LOI_ASP/CMS_Backend/Views/Category/Index.cshtml]
+[C:/Users/PC/Source/Repos/LOI_CMS/CMS_Backend/Views/Category/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/LOI_ASP/CMS_Backend/Views/Home/Index.cshtml]
+[C:/Users/PC/Source/Repos/LOI_CMS/CMS_Backend/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/LOI_ASP/CMS_Backend/Views/Home/Privacy.cshtml]
+[C:/Users/PC/Source/Repos/LOI_CMS/CMS_Backend/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/LOI_ASP/CMS_Backend/Views/Post/Detail.cshtml]
+[C:/Users/PC/Source/Repos/LOI_CMS/CMS_Backend/Views/Post/Detail.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUG9zdFxEZXRhaWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/LOI_ASP/CMS_Backend/Views/Post/Index.cshtml]
+[C:/Users/PC/Source/Repos/LOI_CMS/CMS_Backend/Views/Post/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUG9zdFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/LOI_ASP/CMS_Backend/Views/Shared/Error.cshtml]
+[C:/Users/PC/Source/Repos/LOI_CMS/CMS_Backend/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/LOI_ASP/CMS_Backend/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/PC/Source/Repos/LOI_CMS/CMS_Backend/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/LOI_ASP/CMS_Backend/Views/User/Index.cshtml]
+[C:/Users/PC/Source/Repos/LOI_CMS/CMS_Backend/Views/User/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/LOI_ASP/CMS_Backend/Views/_ViewImports.cshtml]
+[C:/Users/PC/Source/Repos/LOI_CMS/CMS_Backend/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/LOI_ASP/CMS_Backend/Views/_ViewStart.cshtml]
+[C:/Users/PC/Source/Repos/LOI_CMS/CMS_Backend/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/LOI_ASP/CMS_Backend/Views/Shared/_Layout.cshtml]
+[C:/Users/PC/Source/Repos/LOI_CMS/CMS_Backend/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-itmt3c1qp2

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "F:\\LOI_ASP\\CMS_Backend\\CMS_Backend.csproj": {}
+    "C:\\Users\\PC\\Source\\Repos\\LOI_CMS\\CMS_Backend\\CMS_Backend.csproj": {}
   },
   "projects": {
-    "F:\\LOI_ASP\\CMS_Backend\\CMS_Backend.csproj": {
+    "C:\\Users\\PC\\Source\\Repos\\LOI_CMS\\CMS_Backend\\CMS_Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\LOI_ASP\\CMS_Backend\\CMS_Backend.csproj",
+        "projectUniqueName": "C:\\Users\\PC\\Source\\Repos\\LOI_CMS\\CMS_Backend\\CMS_Backend.csproj",
         "projectName": "CMS_Backend",
-        "projectPath": "F:\\LOI_ASP\\CMS_Backend\\CMS_Backend.csproj",
+        "projectPath": "C:\\Users\\PC\\Source\\Repos\\LOI_CMS\\CMS_Backend\\CMS_Backend.csproj",
         "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-        "outputPath": "F:\\LOI_ASP\\CMS_Backend\\obj\\",
+        "outputPath": "C:\\Users\\PC\\Source\\Repos\\LOI_CMS\\CMS_Backend\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -32,8 +32,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "F:\\LOI_ASP\\CMS_Data\\CMS_Data.csproj": {
-                "projectPath": "F:\\LOI_ASP\\CMS_Data\\CMS_Data.csproj"
+              "C:\\Users\\PC\\Source\\Repos\\LOI_CMS\\CMS_Data\\CMS_Data.csproj": {
+                "projectPath": "C:\\Users\\PC\\Source\\Repos\\LOI_CMS\\CMS_Data\\CMS_Data.csproj"
               }
             }
           }
@@ -76,14 +76,14 @@
         }
       }
     },
-    "F:\\LOI_ASP\\CMS_Data\\CMS_Data.csproj": {
+    "C:\\Users\\PC\\Source\\Repos\\LOI_CMS\\CMS_Data\\CMS_Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\LOI_ASP\\CMS_Data\\CMS_Data.csproj",
+        "projectUniqueName": "C:\\Users\\PC\\Source\\Repos\\LOI_CMS\\CMS_Data\\CMS_Data.csproj",
         "projectName": "CMS_Data",
-        "projectPath": "F:\\LOI_ASP\\CMS_Data\\CMS_Data.csproj",
+        "projectPath": "C:\\Users\\PC\\Source\\Repos\\LOI_CMS\\CMS_Data\\CMS_Data.csproj",
         "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-        "outputPath": "F:\\LOI_ASP\\CMS_Data\\obj\\",
+        "outputPath": "C:\\Users\\PC\\Source\\Repos\\LOI_CMS\\CMS_Data\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
