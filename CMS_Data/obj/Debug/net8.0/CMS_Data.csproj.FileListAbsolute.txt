@@ -1,0 +1,11 @@
+F:\LOI_ASP\CMS_Data\obj\Debug\net8.0\CMS_Data.GeneratedMSBuildEditorConfig.editorconfig
+F:\LOI_ASP\CMS_Data\obj\Debug\net8.0\CMS_Data.AssemblyInfoInputs.cache
+F:\LOI_ASP\CMS_Data\obj\Debug\net8.0\CMS_Data.AssemblyInfo.cs
+F:\LOI_ASP\CMS_Data\obj\Debug\net8.0\CMS_Data.csproj.CoreCompileInputs.cache
+F:\LOI_ASP\CMS_Data\bin\Debug\net8.0\CMS_Data.deps.json
+F:\LOI_ASP\CMS_Data\bin\Debug\net8.0\CMS_Data.dll
+F:\LOI_ASP\CMS_Data\bin\Debug\net8.0\CMS_Data.pdb
+F:\LOI_ASP\CMS_Data\obj\Debug\net8.0\CMS_Data.dll
+F:\LOI_ASP\CMS_Data\obj\Debug\net8.0\refint\CMS_Data.dll
+F:\LOI_ASP\CMS_Data\obj\Debug\net8.0\CMS_Data.pdb
+F:\LOI_ASP\CMS_Data\obj\Debug\net8.0\ref\CMS_Data.dll
