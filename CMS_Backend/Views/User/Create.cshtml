@@ -1,0 +1,28 @@
+﻿@model CMS.Data.Entities.User
+
+<h2>Thêm thành viên mới</h2>
+
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label>Tên đăng nhập</label>
+        <input asp-for="Username" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Mật khẩu</label>
+        <input asp-for="PasswordHash" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Họ và tên</label>
+        <input asp-for="FullName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Quyền</label>
+        <input asp-for="Role" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Thêm</button>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</form>

@@ -1,41 +1,80 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using CMS.Data.Entities; // Phải có dòng này để dùng lớp User
+﻿/*Họ tên: Nguyễn Đình Lợi       
+ *MSSV: 2122110147
+ *Lớp: CCQ2211D
+ *Ngày tạo: 17/5/2026
+ *Mô tả: Lớp UserController đại diện cho một controller trong hệ thống quản lý nội dung (CMS) để quản lý người dùng (users).
+ * 
+ */
+using Microsoft.AspNetCore.Mvc;
+using CMS.Data;
+using CMS.Data.Entities;
 
 namespace CMS.Backend.Controllers
 {
     public class UserController : Controller
     {
-        // Hàm Index: Hiển thị danh sách thành viên quản trị
+        private readonly ApplicationDbContext _context;
+
+        public UserController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult Index()
         {
-            // 1. Tạo danh sách Người dùng giả (Mock Data)
-            var users = new List<User>
-            {
-                new User
-                {
-                    Id = 1,
-                    Username = "admin_thai",
-                    FullName = "Nguyễn Cao Thái",
-                    Role = "Administrator"
-                },
-                new User
-                {
-                    Id = 2,
-                    Username = "editor_01",
-                    FullName = "Trần Văn Biên Tập",
-                    Role = "Editor"
-                },
-                new User
-                {
-                    Id = 3,
-                    Username = "author_minh",
-                    FullName = "Lê Quang Minh",
-                    Role = "Author"
-                }
-            };
-
-            // 2. Trả về View kèm theo danh sách người dùng
+            var users = _context.Users.ToList();
             return View(users);
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(User user)
+        {
+            _context.Users.Add(user);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Edit(int id)
+        {
+            var user = _context.Users.Find(id);
+            if (user == null) return NotFound();
+
+            return View(user);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(User user)
+        {
+            _context.Users.Update(user);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Delete(int id)
+        {
+            var user = _context.Users.Find(id);
+            if (user == null) return NotFound();
+
+            return View(user);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var user = _context.Users.Find(id);
+
+            if (user != null)
+            {
+                _context.Users.Remove(user);
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }

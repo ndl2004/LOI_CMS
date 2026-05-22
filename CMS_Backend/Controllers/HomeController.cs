@@ -1,3 +1,10 @@
+﻿/*Họ tên: Nguyễn Đình Lợi       
+ *MSSV: 2122110147
+ *Lớp: CCQ2211D
+ *Ngày tạo: 17/5/2026
+ *Mô tả: Lớp HomeController 
+ * 
+ */
 using CMS_Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;

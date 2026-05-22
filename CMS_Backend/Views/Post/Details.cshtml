@@ -1,0 +1,36 @@
+﻿@model CMS.Data.Entities.Post
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0">
+
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <img src="@Model.ImageUrl"
+                 class="card-img-top"
+                 style="height:450px; object-fit:cover;"
+                 alt="@Model.Title" />
+        }
+
+        <div class="card-body p-4">
+            <h1 class="text-primary mb-3">@Model.Title</h1>
+
+            <p class="text-muted">
+                Ngày đăng: @Model.CreatedDate.ToString("dd/MM/yyyy")
+            </p>
+
+            <hr />
+
+            <div style="font-size:18px; line-height:1.8; text-align:justify;">
+                @Model.Content
+            </div>
+
+            <div class="mt-4">
+                <a asp-controller="Post"
+                   asp-action="Index"
+                   class="btn btn-secondary">
+                    ← Quay lại danh sách
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
