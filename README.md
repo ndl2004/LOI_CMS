@@ -1,70 +1,201 @@
-# Getting Started with Create React App
+# LOI CMS
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![ASP.NET Core](https://img.shields.io/badge/ASP.NET_Core-MVC-blue?style=for-the-badge)
+![C#](https://img.shields.io/badge/C%23-.NET-purple?style=for-the-badge)
+![SQL Server](https://img.shields.io/badge/SQL_Server-red?style=for-the-badge)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-UI-blueviolet?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Buoi_1_2-success?style=for-the-badge)
 
-## Available Scripts
+## Overview
 
-In the project directory, you can run:
+**LOI CMS** là dự án học tập được xây dựng bằng **ASP.NET Core MVC**, nhằm thực hành phát triển hệ thống quản lý nội dung (CMS) theo từng buổi học.
 
-### `npm start`
+Hiện tại repository này chứa nội dung đã hoàn thành của **Buổi 1** và **Buổi 2**, tập trung vào việc xây dựng nền tảng project và module quản lý bài viết cơ bản.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Tech Stack
 
-### `npm test`
+### Backend
+- ASP.NET Core MVC
+- C#
+- Entity Framework Core
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Frontend
+- Razor View
+- HTML5
+- CSS3
+- Bootstrap 5
 
-### `npm run build`
+### Database
+- SQL Server
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Tools
+- Visual Studio 2022
+- SQL Server Management Studio
+- Git / GitHub
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Architecture
 
-### `npm run eject`
+```text
+Client
+  ↓
+Controller
+  ↓
+Model / Entity
+  ↓
+Entity Framework Core
+  ↓
+SQL Server
+  ↓
+View (Razor)
+  ↓
+Response
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Current Features
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Buổi 1 — Project Foundation
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Đã hoàn thành:
 
-## Learn More
+- Khởi tạo project ASP.NET Core MVC
+- Cấu hình middleware
+- Thiết lập routing
+- Static file serving
+- MVC folder structure
+- Cấu hình môi trường chạy project
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Buổi 2 — Post Module
 
-### Code Splitting
+Đã hoàn thành:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- Tạo entity `Post`
+- Kết nối database SQL Server
+- Hiển thị danh sách bài viết
+- Hiển thị chi tiết bài viết
+- Render dữ liệu động bằng Razor
+- Hiển thị hình ảnh bài viết
+- Thiết kế giao diện bằng Bootstrap card layout
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Project Structure
 
-### Making a Progressive Web App
+```bash
+LOI_CMS/
+│
+├── Controllers/
+│   ├── HomeController.cs
+│   └── PostController.cs
+│
+├── Models/
+│   └── Entities/
+│       └── Post.cs
+│
+├── Views/
+│   ├── Home/
+│   └── Post/
+│       ├── Index.cshtml
+│       └── Details.cshtml
+│
+├── wwwroot/
+│
+├── appsettings.json
+├── Program.cs
+└── README.md
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+---
 
-### Advanced Configuration
+## Installation
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Clone Repository
 
-### Deployment
+```bash
+git clone https://github.com/ndl2004/LOI_CMS.git
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+---
 
-### `npm run build` fails to minify
+### Open Project
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Mở bằng:
+
+```bash
+Visual Studio 2022
+```
+
+---
+
+### Configure Database
+
+Cập nhật connection string trong:
+
+```json
+appsettings.json
+```
+
+Ví dụ:
+
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "Server=.;Database=LOI_CMS;Trusted_Connection=True;TrustServerCertificate=True"
+}
+```
+
+---
+
+### Database Migration
+
+Nếu project dùng migrations:
+
+```bash
+Update-Database
+```
+
+hoặc:
+
+```bash
+dotnet ef database update
+```
+
+---
+
+### Run Project
+
+```bash
+dotnet run
+```
+
+hoặc chạy trực tiếp bằng Visual Studio.
+
+---
+
+## Current Status
+
+```text
+Completed: Buổi 1 + Buổi 2
+Status: In Development
+```
+
+---
+
+## Author
+
+**Loi Nguyen**
+
+GitHub:  
+https://github.com/ndl2004
+
+---
+
+## License
+
+This project is for learning purposes.
