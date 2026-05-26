@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<CMS.Data.Entities.Post>
 
 <div class="container mt-4">
-    <h2 class="text-primary mb-4">DANH SÁCH BÀI VIẾT</h2>
+    <h2 class="text-primary mb-4">DANH SÁCH BÀI VIẾT MỚI NHẤT</h2>
 
     <div class="row">
         @foreach (var item in Model)
@@ -15,7 +15,11 @@
                          alt="@item.Title" />
 
                     <div class="card-body">
-                        <h5 class="card-title">@item.Title</h5>
+                        <span class="badge bg-info text-dark">
+                            @(item.Category != null ? item.Category.Name : "Chưa có danh mục")
+                        </span>
+
+                        <h5 class="card-title text-primary mt-2">@item.Title</h5>
 
                         <p class="card-text">
                             @(item.Content.Length > 100
@@ -23,14 +27,14 @@
                                                     : item.Content)
                     </p>
 
-                        <p class="text-muted">
-                            @item.CreatedDate.ToString("dd/MM/yyyy")
+                        <p class="text-muted small">
+                            Ngày đăng: @item.CreatedDate.ToString("dd/MM/yyyy")
                         </p>
 
                         <a asp-controller="Post"
                            asp-action="Details"
                            asp-route-id="@item.Id"
-                           class="btn btn-primary">
+                           class="btn btn-outline-primary btn-sm">
                             Xem chi tiết
                         </a>
                     </div>

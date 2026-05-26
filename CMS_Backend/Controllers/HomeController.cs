@@ -1,39 +1,36 @@
-﻿/*Họ tên: Nguyễn Đình Lợi       
- *MSSV: 2122110147
- *Lớp: CCQ2211D
- *Ngày tạo: 17/5/2026
- *Mô tả: Lớp HomeController 
- * 
- */
-using CMS_Backend.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using CMS.Data;
 
-namespace CMS_Backend.Controllers
+namespace CMS.Backend.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        // Khai báo biến DbContext để kết nối database
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        // Constructor: nhận DbContext từ Dependency Injection
+        public HomeController(ApplicationDbContext context)
         {
-            _logger = logger;
+            _context = context;
         }
 
+        // Trang chủ
         public IActionResult Index()
         {
-            return View();
-        }
+            // LINQ Query:
+            // Include(): lấy thêm dữ liệu từ bảng Category liên kết với Post
+            // OrderByDescending(): sắp xếp bài viết mới nhất lên đầu
+            // Take(3): chỉ lấy 3 bài viết mới nhất
+            // ToList(): chuyển kết quả query thành danh sách
+            var latestPosts = _context.Posts
+                .Include(p => p.Category)
+                .OrderByDescending(p => p.CreatedDate)
+                .Take(3)
+                .ToList();
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            // Truyền danh sách bài viết sang View
+            return View(latestPosts);
         }
     }
 }

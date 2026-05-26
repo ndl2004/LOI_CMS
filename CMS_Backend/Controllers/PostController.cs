@@ -1,13 +1,7 @@
-﻿/*Họ tên: Nguyễn Đình Lợi       
- *MSSV: 2122110147
- *Lớp: CCQ2211D
- *Ngày tạo: 17/5/2026
- *Mô tả: Lớp PostController đại diện cho một controller trong hệ thống quản lý nội dung (CMS) để quản lý các bài viết (posts).
- * 
- */
-using CMS.Data;
+﻿using CMS.Data;
 using CMS.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CMS.Backend.Controllers
 {
@@ -20,20 +14,36 @@ namespace CMS.Backend.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int? id)
         {
-            var posts = _context.Posts.ToList();
-            return View(posts);
+            var posts = _context.Posts
+                .Include(p => p.Category)
+                .AsQueryable();
+
+            if (id != null)
+            {
+                posts = posts.Where(p => p.CategoryId == id);
+            }
+
+            var result = posts
+                .OrderByDescending(p => p.CreatedDate)
+                .ToList();
+
+            return View(result);
         }
 
+        // GET: Post/Details/5
         public IActionResult Details(int id)
         {
-            var post = _context.Posts.FirstOrDefault(p => p.Id == id);
+            var post = _context.Posts
+                .Include(p => p.Category)
+                .FirstOrDefault(p => p.Id == id);
 
             if (post == null)
                 return NotFound();
 
             return View(post);
         }
+
     }
 }
