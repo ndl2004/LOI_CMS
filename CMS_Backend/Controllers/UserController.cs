@@ -1,13 +1,7 @@
-﻿/*Họ tên: Nguyễn Đình Lợi       
- *MSSV: 2122110147
- *Lớp: CCQ2211D
- *Ngày tạo: 17/5/2026
- *Mô tả: Lớp UserController đại diện cho một controller trong hệ thống quản lý nội dung (CMS) để quản lý người dùng (users).
- * 
- */
-using Microsoft.AspNetCore.Mvc;
-using CMS.Data;
+﻿using CMS.Data;
 using CMS.Data.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CMS.Backend.Controllers
 {
@@ -20,45 +14,86 @@ namespace CMS.Backend.Controllers
             _context = context;
         }
 
+        // Hiển thị danh sách User
         public IActionResult Index()
         {
             var users = _context.Users.ToList();
             return View(users);
         }
 
+        // ================= CREATE =================
+
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Create(User user)
+        public IActionResult Create(User model)
         {
-            _context.Users.Add(user);
+            var checkExist = _context.Users.Any(u => u.Username == model.Username);
+
+            if (checkExist)
+            {
+                ModelState.AddModelError("Username", "Tên đăng nhập đã tồn tại!");
+                return View(model);
+            }
+
+            _context.Users.Add(model);
             _context.SaveChanges();
+
             return RedirectToAction("Index");
         }
 
+        // ================= EDIT =================
+
+        [HttpGet]
         public IActionResult Edit(int id)
         {
             var user = _context.Users.Find(id);
-            if (user == null) return NotFound();
+
+            if (user == null)
+                return NotFound();
 
             return View(user);
         }
 
         [HttpPost]
-        public IActionResult Edit(User user)
+        public IActionResult Edit(User model, string NewPassword)
         {
-            _context.Users.Update(user);
+            var existingUser = _context.Users
+                .AsNoTracking()
+                .FirstOrDefault(u => u.Id == model.Id);
+
+            if (existingUser == null)
+                return NotFound();
+
+            // Nếu nhập mật khẩu mới
+            if (!string.IsNullOrEmpty(NewPassword))
+            {
+                model.PasswordHash = NewPassword;
+            }
+            else
+            {
+                model.PasswordHash = existingUser.PasswordHash;
+            }
+
+            _context.Users.Update(model);
             _context.SaveChanges();
+
             return RedirectToAction("Index");
         }
 
+        // ================= DELETE =================
+
+        [HttpGet]
         public IActionResult Delete(int id)
         {
             var user = _context.Users.Find(id);
-            if (user == null) return NotFound();
+
+            if (user == null)
+                return NotFound();
 
             return View(user);
         }
