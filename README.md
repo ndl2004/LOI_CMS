@@ -1,132 +1,118 @@
-# Buổi 2 — Module quản lý bài viết
+# Buổi 3 — Hoàn thiện CRUD bài viết (Create / Edit / Delete)
 
 ## Mục tiêu
 
-Tiếp tục phát triển project bằng cách xây dựng module quản lý bài viết cơ bản.
+Trong buổi học này, dự án tiếp tục phát triển module quản lý bài viết bằng cách hoàn thiện các chức năng CRUD còn thiếu.
+
+Mục tiêu chính:
+
+- Tạo bài viết mới
+- Chỉnh sửa bài viết
+- Xóa bài viết
+- Hoàn thiện quy trình quản lý nội dung cơ bản
 
 ---
 
 ## Nội dung thực hiện
 
-### 1. Tạo Entity Post
+### 1. Chức năng tạo bài viết (Create Post)
 
-Xây dựng model bài viết:
+Xây dựng action tạo bài viết mới.
 
-```csharp
-public class Post
-{
-    public int Id { get; set; }
-    public string Title { get; set; }
-    public string Content { get; set; }
-    public string ImageUrl { get; set; }
-}
-```
+Bao gồm:
 
-Thông tin gồm:
+- GET Create → hiển thị form nhập dữ liệu
+- POST Create → nhận dữ liệu từ form và lưu vào database
 
-- Id
-- Title
-- Content
-- ImageUrl
+Thông tin nhập:
 
----
-
-### 2. Kết nối SQL Server
-
-Sử dụng:
-
-- Entity Framework Core
-- SQL Server
-
-Cấu hình connection string:
-
-```json
-appsettings.json
-```
-
----
-
-### 3. Xây dựng PostController
-
-Tạo controller quản lý bài viết.
-
-Chức năng:
-
-- Lấy danh sách bài viết
-- Trả dữ liệu sang view
+- Tiêu đề bài viết
+- Nội dung bài viết
+- Hình ảnh
 
 Ví dụ:
 
 ```csharp
-Index()
+Create()
 ```
 
 ---
 
-### 4. Hiển thị danh sách bài viết
+### 2. Form nhập dữ liệu
+
+Tạo giao diện nhập bài viết bằng Razor View.
+
+Thành phần:
+
+- Input tiêu đề
+- Textarea nội dung
+- Input ảnh
+- Nút submit
 
 Sử dụng:
 
-- Razor View
-- foreach
-- Model binding
-
-Hiển thị:
-
-- ảnh bài viết
-- tiêu đề
-- nội dung rút gọn
+- Razor syntax
+- Bootstrap form UI
 
 ---
 
-### 5. Thiết kế giao diện
+### 3. Chỉnh sửa bài viết (Edit Post)
 
-Sử dụng:
+Xây dựng chức năng cập nhật bài viết.
 
-```text
-Bootstrap 5
-```
+Bao gồm:
 
-Layout:
+- GET Edit → load dữ liệu hiện tại
+- POST Edit → cập nhật dữ liệu mới
 
-- card design
-- responsive layout
+Chức năng:
+
+- sửa tiêu đề
+- sửa nội dung
+- sửa ảnh
 
 ---
 
-### 6. Trang chi tiết bài viết
+### 4. Xóa bài viết (Delete Post)
 
-Tạo:
+Xây dựng chức năng xóa bài viết.
 
-```text
-Details action
-Details.cshtml
-```
+Quy trình:
 
-Hiển thị:
+- chọn bài viết
+- xác nhận xóa
+- xóa khỏi database
 
-- ảnh lớn
-- tiêu đề
-- nội dung đầy đủ
+---
+
+### 5. Hoàn thiện CRUD
+
+Sau buổi này module Post đã có:
+
+- Create
+- Read
+- Update
+- Delete
 
 ---
 
 ## Kết quả đạt được
 
-✅ Entity Post hoàn chỉnh  
-✅ SQL Server kết nối thành công  
-✅ Danh sách bài viết hoạt động  
-✅ Razor render dữ liệu thành công  
-✅ Bootstrap UI hoàn chỉnh  
-✅ Trang chi tiết bài viết hoạt động  
+✅ Tạo bài viết mới thành công  
+✅ Chỉnh sửa bài viết thành công  
+✅ Xóa bài viết thành công  
+✅ CRUD hoàn chỉnh  
+✅ Kết nối database ổn định  
+✅ Bootstrap UI cho form quản lý  
 
 ---
 
 ## Kiến thức học được
 
-- Entity Framework Core
-- MVC Controller
-- Razor syntax
+- CRUD operations
+- HTTP GET / POST
+- Form handling trong ASP.NET Core MVC
 - Model binding
-- Bootstrap UI
-- CRUD foundation
+- Entity Framework update
+- Delete workflow
+- Razor form development
