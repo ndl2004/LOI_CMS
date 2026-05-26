@@ -1,0 +1,30 @@
+﻿@model IEnumerable<CMS.Data.Entities.Product>
+
+<div class="container mt-4">
+    <h2 class="text-primary mb-4">DANH SÁCH SẢN PHẨM</h2>
+
+    <table class="table table-bordered table-hover shadow-sm">
+        <thead class="table-light">
+            <tr>
+                <th>ID</th>
+                <th>Tên sản phẩm</th>
+                <th>Giá</th>
+                <th>Số lượng tồn</th>
+                <th>Danh mục</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td>@item.Price.ToString("N0") VNĐ</td>
+                    <td>@item.StockQuantity</td>
+                    <td>@item.CategoryProductId</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
