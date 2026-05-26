@@ -1,70 +1,132 @@
-# Getting Started with Create React App
+# Buổi 2 — Module quản lý bài viết
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Mục tiêu
 
-## Available Scripts
+Tiếp tục phát triển project bằng cách xây dựng module quản lý bài viết cơ bản.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## Nội dung thực hiện
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 1. Tạo Entity Post
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Xây dựng model bài viết:
 
-### `npm test`
+```csharp
+public class Post
+{
+    public int Id { get; set; }
+    public string Title { get; set; }
+    public string Content { get; set; }
+    public string ImageUrl { get; set; }
+}
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Thông tin gồm:
 
-### `npm run build`
+- Id
+- Title
+- Content
+- ImageUrl
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 2. Kết nối SQL Server
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Sử dụng:
 
-### `npm run eject`
+- Entity Framework Core
+- SQL Server
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Cấu hình connection string:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```json
+appsettings.json
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 3. Xây dựng PostController
 
-## Learn More
+Tạo controller quản lý bài viết.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Chức năng:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- Lấy danh sách bài viết
+- Trả dữ liệu sang view
 
-### Code Splitting
+Ví dụ:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```csharp
+Index()
+```
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### 4. Hiển thị danh sách bài viết
 
-### Making a Progressive Web App
+Sử dụng:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- Razor View
+- foreach
+- Model binding
 
-### Advanced Configuration
+Hiển thị:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- ảnh bài viết
+- tiêu đề
+- nội dung rút gọn
 
-### Deployment
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### 5. Thiết kế giao diện
 
-### `npm run build` fails to minify
+Sử dụng:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```text
+Bootstrap 5
+```
+
+Layout:
+
+- card design
+- responsive layout
+
+---
+
+### 6. Trang chi tiết bài viết
+
+Tạo:
+
+```text
+Details action
+Details.cshtml
+```
+
+Hiển thị:
+
+- ảnh lớn
+- tiêu đề
+- nội dung đầy đủ
+
+---
+
+## Kết quả đạt được
+
+✅ Entity Post hoàn chỉnh  
+✅ SQL Server kết nối thành công  
+✅ Danh sách bài viết hoạt động  
+✅ Razor render dữ liệu thành công  
+✅ Bootstrap UI hoàn chỉnh  
+✅ Trang chi tiết bài viết hoạt động  
+
+---
+
+## Kiến thức học được
+
+- Entity Framework Core
+- MVC Controller
+- Razor syntax
+- Model binding
+- Bootstrap UI
+- CRUD foundation
