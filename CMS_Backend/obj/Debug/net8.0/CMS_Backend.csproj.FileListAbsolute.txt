@@ -118,3 +118,8 @@ C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\obj\Debug\net8.0\refint\CMS_Backend
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\obj\Debug\net8.0\CMS_Backend.pdb
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\obj\Debug\net8.0\CMS_Backend.genruntimeconfig.cache
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\obj\Debug\net8.0\ref\CMS_Backend.dll
+C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\obj\Debug\net8.0\CMS_Backend.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\Microsoft.OpenApi.dll
+C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
