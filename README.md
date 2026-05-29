@@ -1,132 +1,76 @@
-# Buổi 2 — Module quản lý bài viết
+# API & BACKEND DEVELOPMENT (BUỔI 06)
 
-## Mục tiêu
+Trong buổi 06, project tập trung phát triển phần Backend và Data nhằm chuẩn bị cho việc kết nối ReactJS Frontend với hệ thống CMS thông qua API.
 
-Tiếp tục phát triển project bằng cách xây dựng module quản lý bài viết cơ bản.
+## Nội dung đã thực hiện
 
----
+* Xây dựng các API Controller bằng ASP.NET Core Web API
+* Tạo `PostsController` để cung cấp dữ liệu bài viết dưới dạng JSON
+* Sử dụng `[ApiController]` và `[Route("api/[controller]")]`
+* Sử dụng `ControllerBase` thay cho `Controller` trong API
+* Kết nối API với `ApplicationDbContext`
+* Truy vấn dữ liệu bằng Entity Framework Core và LINQ
+* Xây dựng API lấy toàn bộ danh sách bài viết:
 
-## Nội dung thực hiện
+  * `GET /api/posts`
+* Xây dựng API lấy bài viết theo ID:
 
-### 1. Tạo Entity Post
+  * `GET /api/posts/{id}`
+* Xây dựng API lấy bài viết theo danh mục:
 
-Xây dựng model bài viết:
+  * `GET /api/posts/category/{id}`
+* Sử dụng `.Where()`, `.Select()`, `.OrderByDescending()` trong LINQ
+* Tối ưu dữ liệu trả về bằng cách chỉ lấy các trường cần thiết:
 
-```csharp
-public class Post
-{
-    public int Id { get; set; }
-    public string Title { get; set; }
-    public string Content { get; set; }
-    public string ImageUrl { get; set; }
-}
+  * Id
+  * Title
+  * ImageUrl
+  * CreatedDate
+  * CategoryName
+* Trả dữ liệu dưới dạng JSON cho Frontend ReactJS
+* Kiểm tra API bằng trình duyệt và Swagger
+
+## Cấu hình Swagger
+
+Trong buổi 06, project đã được bổ sung Swagger để test API trực tiếp.
+
+Đã cấu hình:
+
+* `AddSwaggerGen()`
+* `UseSwagger()`
+* `UseSwaggerUI()`
+* `MapControllers()`
+
+Nhờ đó có thể kiểm tra API tại:
+
+```txt
+/swagger
 ```
 
-Thông tin gồm:
+## Xử lý dữ liệu và kiểm tra lỗi
 
-- Id
-- Title
-- Content
-- ImageUrl
-
----
-
-### 2. Kết nối SQL Server
-
-Sử dụng:
-
-- Entity Framework Core
-- SQL Server
-
-Cấu hình connection string:
-
-```json
-appsettings.json
-```
-
----
-
-### 3. Xây dựng PostController
-
-Tạo controller quản lý bài viết.
-
-Chức năng:
-
-- Lấy danh sách bài viết
-- Trả dữ liệu sang view
-
-Ví dụ:
-
-```csharp
-Index()
-```
-
----
-
-### 4. Hiển thị danh sách bài viết
-
-Sử dụng:
-
-- Razor View
-- foreach
-- Model binding
-
-Hiển thị:
-
-- ảnh bài viết
-- tiêu đề
-- nội dung rút gọn
-
----
-
-### 5. Thiết kế giao diện
-
-Sử dụng:
-
-```text
-Bootstrap 5
-```
-
-Layout:
-
-- card design
-- responsive layout
-
----
-
-### 6. Trang chi tiết bài viết
-
-Tạo:
-
-```text
-Details action
-Details.cshtml
-```
-
-Hiển thị:
-
-- ảnh lớn
-- tiêu đề
-- nội dung đầy đủ
-
----
+* Kiểm tra bài viết tồn tại hay không
+* Trả về lỗi `404 Not Found` khi không tìm thấy dữ liệu
+* Trả về JSON message thông báo lỗi
+* Thực hành test nhiều kịch bản API khác nhau
 
 ## Kết quả đạt được
 
-✅ Entity Post hoàn chỉnh  
-✅ SQL Server kết nối thành công  
-✅ Danh sách bài viết hoạt động  
-✅ Razor render dữ liệu thành công  
-✅ Bootstrap UI hoàn chỉnh  
-✅ Trang chi tiết bài viết hoạt động  
+Sau buổi 06, hệ thống đã:
 
----
+* Có thể hoạt động như một RESTful API Backend
+* Trả dữ liệu bài viết dạng JSON
+* Kết nối được với Entity Framework Core
+* Sẵn sàng cho việc kết nối ReactJS Frontend
+* Có Swagger để kiểm tra API nhanh chóng
+* Tách rõ Backend API và giao diện Frontend
 
-## Kiến thức học được
+## Công nghệ sử dụng
 
-- Entity Framework Core
-- MVC Controller
-- Razor syntax
-- Model binding
-- Bootstrap UI
-- CRUD foundation
+* ASP.NET Core Web API
+* Entity Framework Core
+* LINQ
+* Swagger / Swashbuckle
+* SQL Server
+* JSON API
+* Dependency Injection
