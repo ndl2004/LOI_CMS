@@ -1,0 +1,62 @@
+﻿@model CMS.Data.Entities.Product
+
+@{
+    Layout = "_LayoutAdmin";
+}
+
+<h2>Sửa sản phẩm</h2>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="ImageUrl" />
+
+    <div class="mb-3">
+        <label class="form-label">Tên sản phẩm</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Giá</label>
+        <input asp-for="Price" class="form-control" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Số lượng tồn</label>
+        <input asp-for="StockQuantity" class="form-control" />
+        <span asp-validation-for="StockQuantity" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Mã danh mục</label>
+        <input asp-for="CategoryProductId" class="form-control" />
+        <span asp-validation-for="CategoryProductId" class="text-danger"></span>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+    {
+        <div class="mb-3">
+            <label class="form-label">Ảnh hiện tại</label>
+            <br />
+            <img src="@Model.ImageUrl" width="150" class="img-thumbnail" />
+        </div>
+    }
+
+    <div class="mb-3">
+        <label class="form-label">Chọn ảnh mới</label>
+        <input type="file" name="ImageFile" class="form-control" accept="image/*" />
+        <small class="text-muted">Nếu không chọn ảnh mới thì hệ thống giữ nguyên ảnh cũ.</small>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Cập nhật</button>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

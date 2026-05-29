@@ -1,0 +1,58 @@
+﻿@model CMS.Data.Entities.Customer
+
+@{
+    Layout = "_LayoutAdmin";
+}
+
+<h2 class="text-danger">Xóa khách hàng</h2>
+
+<div class="alert alert-danger">
+    Bạn có chắc chắn muốn xóa khách hàng này không?
+</div>
+
+<table class="table table-bordered">
+
+    <tr>
+        <th>ID</th>
+        <td>@Model.Id</td>
+    </tr>
+
+    <tr>
+        <th>Họ tên</th>
+        <td>@Model.FullName</td>
+    </tr>
+
+    <tr>
+        <th>Email</th>
+        <td>@Model.Email</td>
+    </tr>
+
+    <tr>
+        <th>Số điện thoại</th>
+        <td>@Model.Phone</td>
+    </tr>
+
+    <tr>
+        <th>Địa chỉ</th>
+        <td>@Model.Address</td>
+    </tr>
+
+</table>
+
+<form asp-action="Delete" method="post">
+
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" asp-for="Id" />
+
+    <button type="submit"
+            class="btn btn-danger">
+        Xóa
+    </button>
+
+    <a asp-action="Index"
+       class="btn btn-secondary">
+        Hủy
+    </a>
+
+</form>

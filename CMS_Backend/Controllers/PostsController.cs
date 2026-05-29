@@ -1,24 +1,59 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*
+ * Họ tên: Nguyễn Đình Lợi
+ * MSSV: 2122110147
+ * Lớp: CCQ2211D
+ * Ngày tạo: 29/05/2026
+ * Mô tả:
+ * API Controller dùng để cung cấp dữ liệu bài viết cho Frontend.
+ * Chức năng:
+ * - Lấy toàn bộ danh sách bài viết
+ * - Lấy danh sách bài viết theo danh mục
+ * - Lấy chi tiết bài viết theo ID
+ * - Trả dữ liệu dưới dạng JSON
+ * - Hỗ trợ kết nối Frontend thông qua RESTful API
+ */
+
+using Microsoft.AspNetCore.Mvc;
 using CMS.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace CMS.Backend.Controllers
 {
+    /// <summary>
+    /// API quản lý bài viết
+    /// Đường dẫn mặc định: /api/posts
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class PostsController : ControllerBase
     {
+        // Biến kết nối Database
         private readonly ApplicationDbContext _context;
 
+        /// <summary>
+        /// Hàm khởi tạo Controller
+        /// Dependency Injection sẽ tự động truyền DbContext vào
+        /// </summary>
+        /// <param name="context">Đối tượng kết nối Database</param>
         public PostsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: /api/posts
+        // ==================================================
+        // LẤY TOÀN BỘ DANH SÁCH BÀI VIẾT
+        // ==================================================
+
+        /// <summary>
+        /// API lấy toàn bộ danh sách bài viết
+        /// GET: /api/posts
+        /// </summary>
+        /// <returns>Danh sách bài viết dạng JSON</returns>
         [HttpGet]
         public IActionResult GetAll()
         {
+            // Lấy dữ liệu từ bảng Posts
+            // Include() dùng để lấy thêm dữ liệu Category liên quan
             var posts = _context.Posts
                 .Include(p => p.Category)
                 .OrderByDescending(p => p.Id)
@@ -28,48 +63,76 @@ namespace CMS.Backend.Controllers
                     p.Title,
                     p.ImageUrl,
                     p.CreatedDate,
-                    CategoryName = p.Category != null ? p.Category.Name : "Chưa có danh mục"
+
+                    // Hiển thị tên danh mục
+                    CategoryName = p.Category != null
+                        ? p.Category.Name
+                        : "Chưa có danh mục"
                 })
                 .ToList();
 
+            // Trả dữ liệu kèm mã trạng thái HTTP 200
             return Ok(posts);
         }
-        // 2. Định nghĩa đường dẫn có tham số: api/posts/category/{id}
+
+        // ==================================================
+        // LẤY DANH SÁCH BÀI VIẾT THEO DANH MỤC
+        // ==================================================
+
+        /// <summary>
+        /// API lấy bài viết theo CategoryId
+        /// GET: /api/posts/category/{categoryId}
+        /// </summary>
+        /// <param name="categoryId">Mã danh mục</param>
+        /// <returns>Danh sách bài viết thuộc danh mục</returns>
         [HttpGet("category/{categoryId}")]
         public IActionResult GetByCategory(int categoryId)
         {
-            // Lọc các bài viết có CategoryId trùng với ID truyền vào từ URL
+            // Lọc bài viết theo CategoryId
             var posts = _context.Posts
                 .Where(p => p.CategoryId == categoryId)
-                .Select(p => new {
+                .Select(p => new
+                {
                     p.Id,
                     p.Title,
                     p.ImageUrl,
-                    p.CreatedDate,
+                    p.CreatedDate
                 })
                 .ToList();
 
+            // Trả dữ liệu JSON
             return Ok(posts);
-
         }
-        // 1. Định nghĩa đường dẫn nhận ID: api/posts/{id}
+
+        // ==================================================
+        // LẤY CHI TIẾT BÀI VIẾT
+        // ==================================================
+
+        /// <summary>
+        /// API lấy chi tiết bài viết theo ID
+        /// GET: /api/posts/{id}
+        /// </summary>
+        /// <param name="id">Mã bài viết</param>
+        /// <returns>Thông tin chi tiết bài viết</returns>
         [HttpGet("{id}")]
         public IActionResult GetDetail(int id)
         {
-            // 2. Tìm bài viết đầu tiên có Id khớp với tham số truyền vào
+            // Tìm bài viết theo ID
             var post = _context.Posts
                 .FirstOrDefault(p => p.Id == id);
 
-            // 3. Xử lý trường hợp không tìm thấy (ID không tồn tại)
+            // Nếu không tìm thấy dữ liệu
             if (post == null)
             {
-                // Trả về lỗi 404 kèm thông báo dưới dạng JSON
-                return NotFound(new { message = "Không tìm thấy bài viết này trong hệ thống" });
+                // Trả về lỗi HTTP 404
+                return NotFound(new
+                {
+                    message = "Không tìm thấy bài viết này trong hệ thống"
+                });
             }
 
-            // 4. Trả về bài viết tìm thấy kèm mã 200 (Thành công)
+            // Trả về dữ liệu kèm HTTP 200
             return Ok(post);
         }
-
     }
 }

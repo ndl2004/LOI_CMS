@@ -1,0 +1,73 @@
+﻿@model CMS.Data.Entities.Order
+
+@{
+    Layout = "_LayoutAdmin";
+}
+
+<h2 class="text-danger">Xóa đơn hàng</h2>
+
+<div class="alert alert-danger">
+    Bạn có chắc chắn muốn xóa đơn hàng này không?
+</div>
+
+<table class="table table-bordered">
+
+    <tr>
+        <th>ID</th>
+        <td>@Model.Id</td>
+    </tr>
+
+    <tr>
+        <th>Ngày đặt hàng</th>
+        <td>@Model.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+    </tr>
+
+    <tr>
+        <th>Khách hàng</th>
+        <td>@Model.Customer?.FullName</td>
+    </tr>
+
+    <tr>
+        <th>Trạng thái</th>
+        <td>
+            @switch (Model.Status)
+            {
+                case 0:
+                    <span>Chờ duyệt</span>
+                    break;
+
+                case 1:
+                    <span>Đang giao</span>
+                    break;
+
+                case 2:
+                    <span>Hoàn thành</span>
+                    break;
+            }
+        </td>
+    </tr>
+
+    <tr>
+        <th>Ghi chú</th>
+        <td>@Model.Notes</td>
+    </tr>
+
+</table>
+
+<form asp-action="Delete" method="post">
+
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" asp-for="Id" />
+
+    <button type="submit"
+            class="btn btn-danger">
+        Xóa
+    </button>
+
+    <a asp-action="Index"
+       class="btn btn-secondary">
+        Hủy
+    </a>
+
+</form>
