@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using CMS.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace CMS.Backend.Controllers
+namespace CMS_Backend.Controllers.API
 {
     /// <summary>
     /// API quản lý bài viết

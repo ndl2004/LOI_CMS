@@ -1,28 +1,122 @@
-﻿@{
+﻿@model IEnumerable<CMS.Data.Entities.Post>
+
+@{
     Layout = "_LayoutAdmin";
 }
 
-@model IEnumerable<CMS.Data.Entities.Post>
+<div class="container-fluid">
 
-<div class="container mt-5">
-    <h2 class="text-center mb-4 text-danger">TIN TỨC MỚI NHẤT</h2>
-    <div class="row">
-        @foreach (var item in Model)
-        {
-            <div class="col-md-4">
-                <div class="card shadow-sm h-100">
-                    <img src="@item.ImageUrl" class="card-img-top" alt="Thumbnail">
-                    <div class="card-body">
-                        <span class="badge bg-primary mb-2">@item.Category.Name</span>
-                        <h5 class="card-title">@item.Title</h5>
-                        <p class="card-text text-truncate">@item.Content</p>
-                        <a href="/Post/Details/@item.Id" class="btn btn-outline-danger btn-sm">Đọc tiếp</a>
-                    </div>
-                    <div class="card-footer text-muted small">
-                        Ngày đăng: @item.CreatedDate.ToString("dd/MM/yyyy")
-                    </div>
+    <!-- THỐNG KÊ -->
+    <div class="row mb-4">
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm bg-primary text-white">
+                <div class="card-body">
+                    <h6>Tổng bài viết</h6>
+                    <h2>@ViewBag.TotalPosts</h2>
                 </div>
             </div>
-        }
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm bg-success text-white">
+                <div class="card-body">
+                    <h6>Sản phẩm</h6>
+                    <h2>@ViewBag.TotalProducts</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm bg-warning text-dark">
+                <div class="card-body">
+                    <h6>Khách hàng</h6>
+                    <h2>@ViewBag.TotalCustomers</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm bg-danger text-white">
+                <div class="card-body">
+                    <h6>Đơn hàng</h6>
+                    <h2>@ViewBag.TotalOrders</h2>
+                </div>
+            </div>
+        </div>
+
     </div>
+
+    <!-- CHÀO MỪNG -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <h4>
+                Xin chào,
+                @User.FindFirst("FullName")?.Value 👋
+            </h4>
+
+            <p class="text-muted mb-0">
+                Chào mừng bạn đến với hệ thống quản trị LOI_CMS.
+            </p>
+        </div>
+    </div>
+
+    <!-- BÀI VIẾT MỚI -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="text-danger">
+            <i class="bi bi-newspaper"></i>
+            Tin tức mới nhất
+        </h3>
+    </div>
+
+    <div class="row">
+
+        @foreach (var item in Model)
+        {
+            <div class="col-lg-4 mb-4">
+
+                <div class="card shadow-sm h-100 border-0">
+
+                    <img src="@item.ImageUrl"
+                         class="card-img-top"
+                         style="height:220px; object-fit:cover;">
+
+                    <div class="card-body">
+
+                        <span class="badge bg-primary mb-2">
+                            @item.Category?.Name
+                        </span>
+
+                        <h5 class="card-title">
+                            @item.Title
+                        </h5>
+
+                        <p class="card-text text-muted">
+                            @(item.Content.Length > 120
+                                                    ? item.Content.Substring(0, 120) + "..."
+                                                    : item.Content)
+                    </p>
+
+                        <a href="/Post/Details/@item.Id"
+                           class="btn btn-outline-primary btn-sm">
+
+                            Xem chi tiết
+                        </a>
+
+                    </div>
+
+                    <div class="card-footer bg-white">
+                        <small class="text-muted">
+                            <i class="bi bi-calendar3"></i>
+                            @item.CreatedDate.ToString("dd/MM/yyyy")
+                        </small>
+                    </div>
+
+                </div>
+
+            </div>
+                }
+
+    </div>
+
 </div>

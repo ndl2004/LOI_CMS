@@ -45,18 +45,23 @@ namespace CMS.Backend.Controllers
         /// <returns>Danh sách bài viết mới nhất</returns>
         public IActionResult Index()
         {
+            // Thống kê tổng số dữ liệu trong hệ thống
+            ViewBag.TotalPosts = _context.Posts.Count();
+            ViewBag.TotalProducts = _context.Products.Count();
+            ViewBag.TotalCustomers = _context.Customers.Count();
+            ViewBag.TotalOrders = _context.Orders.Count();
+
             /*
              * LINQ Query:
              * Include()           : Lấy thêm dữ liệu Category liên kết với Post
              * OrderByDescending() : Sắp xếp bài viết mới nhất lên đầu
-             * Take(3)             : Chỉ lấy 3 bài viết mới nhất
+             * Take(6)             : Lấy 6 bài viết mới nhất
              * ToList()            : Chuyển kết quả truy vấn thành List
              */
-
             var latestPosts = _context.Posts
                 .Include(p => p.Category)
                 .OrderByDescending(p => p.CreatedDate)
-                .Take(3)
+                .Take(6)
                 .ToList();
 
             // Truyền danh sách bài viết sang View

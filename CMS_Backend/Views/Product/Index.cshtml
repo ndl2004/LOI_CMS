@@ -14,10 +14,11 @@
         </a>
     </div>
 
-    <table class="table table-bordered table-hover shadow-sm">
+    <table class="table table-bordered table-hover shadow-sm align-middle">
         <thead class="table-light">
             <tr>
                 <th>ID</th>
+                <th>Ảnh</th>
                 <th>Tên sản phẩm</th>
                 <th>Giá</th>
                 <th>Số lượng tồn</th>
@@ -31,6 +32,20 @@
             {
                 <tr>
                     <td>@item.Id</td>
+
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                        {
+                            <img src="@item.ImageUrl"
+                                 alt="@item.Name"
+                                 class="img-thumbnail"
+                                 style="width: 80px; height: 80px; object-fit: cover;" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">Chưa có ảnh</span>
+                        }
+                    </td>
 
                     <td>
                         <strong>@item.Name</strong>
