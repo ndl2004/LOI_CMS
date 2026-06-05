@@ -60,8 +60,14 @@ wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js
 wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
 wwwroot\uploads\8d6fd1ad-aff1-48a8-9d26-b475ffc0445f.png
 wwwroot\uploads\d3985e90-7929-4e00-a288-45b89860a165.jpg
+wwwroot\uploads\products\0bdc155a-d705-456c-a0b9-614df317e6e4.png
+wwwroot\uploads\products\2496ac9f-dfb5-4607-bf53-581068ead06e.jpg
+wwwroot\uploads\products\5bcb850a-0683-40c9-8f02-07493fbee1ed.jpg
 wwwroot\uploads\products\7a38fec6-673a-4803-9f03-a0323c103328.png
 wwwroot\uploads\products\8fe5ee98-074c-479b-b368-fec0e13c0248.png
 wwwroot\uploads\products\92df585f-b084-4d46-bb7d-a5b050172296.png
 wwwroot\uploads\products\b08c367b-7691-4f48-91a2-e682fd761ec1.png
+wwwroot\uploads\products\c3190886-3ed5-4d97-b5bd-888d98b120e7.jpg
+wwwroot\uploads\products\cf87f69c-4566-4509-9ff9-b9a0651c0a11.png
 wwwroot\uploads\products\d226b5a4-ff58-4a3b-8c58-d2b58d49f2be.png
+wwwroot\uploads\products\e71fcd5c-ef0d-4302-acd2-1309d8648665.png
