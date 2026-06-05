@@ -1,76 +1,54 @@
-# API & BACKEND DEVELOPMENT (BUỔI 06)
+# FRONTEND DEVELOPMENT & INTEGRATION (BUỔI 07)
 
-Trong buổi 06, project tập trung phát triển phần Backend và Data nhằm chuẩn bị cho việc kết nối ReactJS Frontend với hệ thống CMS thông qua API.
+Trong buổi 07, dự án tập trung vào việc xây dựng giao diện người dùng (Frontend) bằng ReactJS (`cms.frontend`) và thực hiện kết nối, gọi các API cơ bản từ Backend để hiển thị dữ liệu lên giao diện.
 
-## Nội dung đã thực hiện
+---
 
-* Xây dựng các API Controller bằng ASP.NET Core Web API
-* Tạo `PostsController` để cung cấp dữ liệu bài viết dưới dạng JSON
-* Sử dụng `[ApiController]` và `[Route("api/[controller]")]`
-* Sử dụng `ControllerBase` thay cho `Controller` trong API
-* Kết nối API với `ApplicationDbContext`
-* Truy vấn dữ liệu bằng Entity Framework Core và LINQ
-* Xây dựng API lấy toàn bộ danh sách bài viết:
+## 🚀 Nội dung đã thực hiện
 
-  * `GET /api/posts`
-* Xây dựng API lấy bài viết theo ID:
+### 1. Xây dựng Giao diện Frontend (ReactJS)
+* Khởi tạo và cấu hình cấu trúc thư mục ứng dụng trong `cms.frontend`.
+* Thiết kế giao diện các trang chức năng chính đảm bảo tính responsive và thân thiện với người dùng.
+* Xây dựng hệ thống Routing để điều hướng mượt mà giữa các trang.
 
-  * `GET /api/posts/{id}`
-* Xây dựng API lấy bài viết theo danh mục:
+### 2. Tích hợp API & Hiển thị Dữ liệu
+Sử dụng `fetch` hoặc `axios` để kết nối và lấy dữ liệu dạng JSON từ ASP.NET Core Web API:
+* **Danh mục (Category):** Lấy danh sách danh mục để đổ vào Menu/Sidebar.
+* **Sản phẩm (Product):** Hiển thị danh sách sản phẩm, chi tiết sản phẩm.
+* **Bài viết (Post):** Gọi API `GET /api/posts` để hiển thị danh sách bài viết mới nhất lên giao diện UI.
+* **Đăng nhập (Login):** Xây dựng form đăng nhập, xử lý gửi dữ liệu tài khoản lên Backend để xác thực.
 
-  * `GET /api/posts/category/{id}`
-* Sử dụng `.Where()`, `.Select()`, `.OrderByDescending()` trong LINQ
-* Tối ưu dữ liệu trả về bằng cách chỉ lấy các trường cần thiết:
+### 3. Quản lý Trạng thái & Xử lý Logic
+* Sử dụng `useState` và `useEffect` trong React để quản lý vòng đời component và trạng thái dữ liệu khi gọi API.
+* Xử lý trạng thái Loading (đang tải dữ liệu) và thông báo lỗi trực quan nếu API gặp sự cố.
 
-  * Id
-  * Title
-  * ImageUrl
-  * CreatedDate
-  * CategoryName
-* Trả dữ liệu dưới dạng JSON cho Frontend ReactJS
-* Kiểm tra API bằng trình duyệt và Swagger
+---
 
-## Cấu hình Swagger
+## 🛠️ Công nghệ sử dụng trong buổi này
 
-Trong buổi 06, project đã được bổ sung Swagger để test API trực tiếp.
+* **Frontend Framework:** ReactJS (Hooks, React Router DOM)
+* **Styling:** CSS / HTML5 (hoặc TailwindCSS/Bootstrap tùy theo UI bạn dùng)
+* **API Client:** Axios / Fetch API
+* **Backend hỗ trợ:** ASP.NET Core Web API, Entity Framework Core (từ Buổi 06)
 
-Đã cấu hình:
+---
 
-* `AddSwaggerGen()`
-* `UseSwagger()`
-* `UseSwaggerUI()`
-* `MapControllers()`
+## 📂 Cấu trúc thư mục cập nhật
 
-Nhờ đó có thể kiểm tra API tại:
+* `cms.frontend/`: Chứa toàn bộ mã nguồn giao diện ReactJS.
+* `CMS_Backend/`: API RESTful phục vụ dữ liệu cho Frontend.
+* `CMS_Data/`: Lớp kết nối và quản lý cơ sở dữ liệu SQL Server.
 
-```txt
-/swagger
-```
+---
 
-## Xử lý dữ liệu và kiểm tra lỗi
+## 🏃‍♂️ Hướng dẫn chạy dự án
 
-* Kiểm tra bài viết tồn tại hay không
-* Trả về lỗi `404 Not Found` khi không tìm thấy dữ liệu
-* Trả về JSON message thông báo lỗi
-* Thực hành test nhiều kịch bản API khác nhau
+### Khởi chạy Backend
+1. Mở file `LOI_ASP.sln` bằng Visual Studio.
+2. Nhấn `F5` hoặc nút `Start` để chạy Backend (mặc định sẽ mở Swagger tại `/swagger`).
 
-## Kết quả đạt được
-
-Sau buổi 06, hệ thống đã:
-
-* Có thể hoạt động như một RESTful API Backend
-* Trả dữ liệu bài viết dạng JSON
-* Kết nối được với Entity Framework Core
-* Sẵn sàng cho việc kết nối ReactJS Frontend
-* Có Swagger để kiểm tra API nhanh chóng
-* Tách rõ Backend API và giao diện Frontend
-
-## Công nghệ sử dụng
-
-* ASP.NET Core Web API
-* Entity Framework Core
-* LINQ
-* Swagger / Swashbuckle
-* SQL Server
-* JSON API
-* Dependency Injection
+### Khởi chạy Frontend
+1. Mở thư mục `cms.frontend` bằng terminal.
+2. Cài đặt dependencies (nếu có thêm thư viện mới):
+   ```bash
+   npm install
