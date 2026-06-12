@@ -1,34 +1,31 @@
-﻿/*Họ tên: Nguyễn Đình Lợi       
- *MSSV: 2122110147
- *Lớp: CCQ2211D
- *Ngày tạo: 17/5/2026
- *Mô tả: Lớp Customer đại diện cho một khách hàng trong hệ thống quản lý nội dung (CMS).
- * 
- */
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CMS.Data.Entities
 {
-    // Khách hàng
     public class Customer
     {
-        [Key]
         public int Id { get; set; }
 
-        [Required]
+
+    [Required(ErrorMessage = "Họ tên không được để trống")]
+        [StringLength(100)]
         public string FullName { get; set; }
 
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "Email không được để trống")]
+        [EmailAddress(ErrorMessage = "Email không đúng định dạng")]
         public string Email { get; set; }
 
+        [Required(ErrorMessage = "Mật khẩu không được để trống")]
+        [MinLength(6, ErrorMessage = "Mật khẩu phải từ 6 ký tự trở lên")]
+        public string Password { get; set; }
+
+        [Required(ErrorMessage = "Số điện thoại không được để trống")]
+        [Phone(ErrorMessage = "Số điện thoại không hợp lệ")]
         public string? Phone { get; set; }
 
+        [Required(ErrorMessage = "Địa chỉ không được để trống")]
         public string? Address { get; set; }
-
-        [Required]
-        public string Password { get; set; } // Lưu mật khẩu thô theo yêu cầu tối giản
-
-        public virtual ICollection<Order>? Orders { get; set; }
     }
+
+
 }

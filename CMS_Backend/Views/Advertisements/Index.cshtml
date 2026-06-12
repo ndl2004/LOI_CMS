@@ -1,0 +1,110 @@
+﻿@model IEnumerable<CMS.Data.Entities.Advertisement>
+
+@{
+    Layout = "_LayoutAdmin";
+}
+
+<div class="container mt-4">
+
+    ```
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="text-primary">
+            QUẢN LÝ BANNER QUẢNG CÁO
+        </h2>
+
+        <a asp-action="Create"
+           class="btn btn-success">
+            <i class="bi bi-plus-circle"></i>
+            Thêm Banner
+        </a>
+    </div>
+
+    <table class="table table-bordered table-hover shadow-sm">
+        <thead class="table-light">
+            <tr>
+                <th width="60">STT</th>
+                <th>Tiêu đề</th>
+                <th>Mô tả</th>
+                <th width="180">Ảnh Banner</th>
+                <th width="120">Trạng thái</th>
+                <th width="100">Thứ tự</th>
+                <th width="180">Thao tác</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @{
+                int stt = 1;
+            }
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@stt</td>
+
+                    <td>
+                        <strong>@item.Title</strong>
+                    </td>
+
+                    <td>
+                        @(string.IsNullOrEmpty(item.Description)
+                                            ? "Không có mô tả"
+                                            : item.Description)
+                </td>
+
+                    <td class="text-center">
+                    @if (!string.IsNullOrEmpty(item.Image))
+                        {
+                            <img src="@item.Image"
+                                 class="img-thumbnail"
+                                 style="max-width:150px; max-height:80px;" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">
+                                Chưa có ảnh
+                            </span>
+                        }
+                    </td>
+
+                    <td class="text-center">
+                        @if (item.IsActive)
+                        {
+                            <span class="badge bg-success">
+                                Đang hiển thị
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">
+                                Đã ẩn
+                            </span>
+                        }
+                    </td>
+
+                    <td class="text-center">
+                        @item.SortOrder
+                    </td>
+
+                    <td>
+                        <a asp-action="Edit"
+                           asp-route-id="@item.Id"
+                           class="btn btn-warning btn-sm">
+                            Sửa
+                        </a>
+
+                        <a asp-action="Delete"
+                           asp-route-id="@item.Id"
+                           class="btn btn-danger btn-sm">
+                            Xóa
+                        </a>
+                    </td>
+                </tr>
+
+                stt++;
+            }
+        </tbody>
+    </table>
+    ```
+
+</div>

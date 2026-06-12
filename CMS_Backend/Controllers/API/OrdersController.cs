@@ -101,6 +101,7 @@ namespace CMS_Backend.Controllers.API
                 _context.OrderDetails.Add(orderDetail);
 
                 product.StockQuantity -= item.Quantity;
+                product.SoldQuantity += item.Quantity;
 
                 totalAmount += product.Price * item.Quantity;
             }

@@ -5,6 +5,18 @@
     "version": "1.0"
   },
   "paths": {
+    "/api/Advertisements": {
+      "get": {
+        "tags": [
+          "Advertisements"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Auth/CustomerRegister": {
       "post": {
         "tags": [
@@ -330,6 +342,9 @@
     }
   },
   "tags": [
+    {
+      "name": "Advertisements"
+    },
     {
       "name": "Auth"
     },

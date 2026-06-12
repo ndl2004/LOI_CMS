@@ -120,15 +120,13 @@ function Header() {
 
             <nav className="navbar">
                 <div className="container nav-row">
-                    <Link to="/shop" className="category-btn">
-                        ☰ Danh mục
-                    </Link>
+                   
 
                     <Link to="/">Trang chủ</Link>
                     <Link to="/shop">Sản phẩm</Link>
-                    <Link to="/shop">Khuyến mãi</Link>
-                    <Link to="/">Thương hiệu</Link>
-                    <Link to="/">Cẩm nang làm đẹp</Link>
+                    <Link to="/promotions">Khuyến mãi</Link>
+                    <Link to="/brands">Thương hiệu</Link>
+                    <Link to="/blog">Cẩm nang làm đẹp</Link>
                 </div>
             </nav>
         </>

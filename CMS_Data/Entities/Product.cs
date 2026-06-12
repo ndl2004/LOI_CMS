@@ -28,6 +28,8 @@ namespace CMS.Data.Entities
 
         public string? ImageUrl { get; set; }
 
+        public int SoldQuantity { get; set; }
+
         // Khóa ngoại nối tới CategoryProduct
         public int CategoryProductId { get; set; }
 

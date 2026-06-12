@@ -1,0 +1,69 @@
+﻿@model CMS.Data.Entities.Advertisement
+
+@{
+    Layout = "_LayoutAdmin";
+}
+
+<h2>Sửa Banner</h2>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label>Tiêu đề</label>
+        <input asp-for="Title" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Mô tả</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label>Ảnh hiện tại</label><br />
+
+        @if (!string.IsNullOrEmpty(Model.Image))
+        {
+            <img src="@Model.Image"
+                 width="250"
+                 class="rounded border" />
+        }
+        else
+        {
+            <p class="text-muted">Chưa có ảnh banner</p>
+        }
+    </div>
+
+    <div class="mb-3">
+        <label>Đổi ảnh mới</label>
+        <input type="file"
+               name="imageFile"
+               class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Thứ tự</label>
+        <input asp-for="SortOrder"
+               class="form-control" />
+    </div>
+
+    <div class="form-check mb-3">
+        <input type="checkbox"
+               name="isActive"
+               value="true"
+               class="form-check-input"
+               @(Model.IsActive ? "checked" : "") />
+
+        <label class="form-check-label">
+            Hiển thị banner
+        </label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Cập nhật
+    </button>
+
+    <a asp-action="Index" class="btn btn-secondary">
+        Quay lại
+    </a>
+</form>

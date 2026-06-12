@@ -13,6 +13,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import OrderHistory from "./pages/OrderHistory";
 import BlogDetail from "./pages/BlogDetail";
+import Blog from "./pages/Blog";
+
 function App() {
     return (
         <>
@@ -28,6 +30,8 @@ function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/orders" element={<OrderHistory />} />
                 <Route path="/blog/:id" element={<BlogDetail />} />
+                <Route path="/blog" element={<Blog />} />
+
             </Routes>
 
             <Footer />
