@@ -1,5 +1,6 @@
 ﻿import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { IMAGE_BASE_URL } from "../config";
 
 function Cart() {
     const [cart, setCart] = useState([]);
@@ -62,7 +63,7 @@ function Cart() {
                         <div className="cart-list">
                             {cart.map((item) => {
                                 const imageUrl = item.imageUrl
-                                    ? `https://localhost:7175${item.imageUrl}`
+                                    ? `${IMAGE_BASE_URL}${item.imageUrl}`
                                     : "https://via.placeholder.com/300x300?text=LOI+Cosmetics";
 
                                 const itemTotal =

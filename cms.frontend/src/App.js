@@ -14,7 +14,8 @@ import Register from "./pages/Register";
 import OrderHistory from "./pages/OrderHistory";
 import BlogDetail from "./pages/BlogDetail";
 import Blog from "./pages/Blog";
-
+import Search from "./pages/Search";
+import ForgotPassword from "./pages/ForgotPassword";
 function App() {
     return (
         <>
@@ -31,6 +32,8 @@ function App() {
                 <Route path="/orders" element={<OrderHistory />} />
                 <Route path="/blog/:id" element={<BlogDetail />} />
                 <Route path="/blog" element={<Blog />} />
+                <Route path="/search" element={<Search />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
 
             </Routes>
 

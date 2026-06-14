@@ -1,60 +1,39 @@
-﻿/*
- * Họ tên: Nguyễn Đình Lợi
- * MSSV: 2122110147
- * Lớp: CCQ2211D
- * Ngày tạo: 04/06/2026
- * Mô tả:
- * API Controller dùng để xử lý luồng đặt hàng từ Frontend.
- * Chức năng:
- * - Nhận dữ liệu giỏ hàng từ ReactJS
- * - Tạo đơn hàng mới
- * - Thêm chi tiết đơn hàng vào bảng OrderDetail
- * - Khấu trừ số lượng tồn kho của sản phẩm
- * - Lấy lịch sử đơn hàng theo khách hàng
- * - Trả dữ liệu dưới dạng JSON
- */
-
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using CMS.Data;
 using CMS.Data.Entities;
-using Microsoft.EntityFrameworkCore;
+using CMS_Backend.Services;
 
 namespace CMS_Backend.Controllers.API
 {
-    /// <summary>
-    /// API xử lý đơn hàng
-    /// Đường dẫn mặc định: /api/orders
-    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class OrdersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IEmailService _emailService;
 
-        public OrdersController(ApplicationDbContext context)
+        public OrdersController(
+            ApplicationDbContext context,
+            IEmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
         [HttpPost]
-        public IActionResult CreateOrder(CreateOrderRequest request)
+        public async Task<IActionResult> CreateOrder(CreateOrderRequest request)
         {
-            var customer = _context.Customers.FirstOrDefault(c => c.Id == request.CustomerId);
+            var customer = _context.Customers
+                .FirstOrDefault(c => c.Id == request.CustomerId);
 
             if (customer == null)
             {
-                return BadRequest(new
-                {
-                    message = "Khách hàng không tồn tại"
-                });
+                return BadRequest(new { message = "Khách hàng không tồn tại" });
             }
 
             if (request.Items == null || request.Items.Count == 0)
             {
-                return BadRequest(new
-                {
-                    message = "Giỏ hàng không có sản phẩm"
-                });
+                return BadRequest(new { message = "Giỏ hàng không có sản phẩm" });
             }
 
             var order = new Order
@@ -69,10 +48,12 @@ namespace CMS_Backend.Controllers.API
             _context.SaveChanges();
 
             decimal totalAmount = 0;
+            var productRows = "";
 
             foreach (var item in request.Items)
             {
-                var product = _context.Products.FirstOrDefault(p => p.Id == item.ProductId);
+                var product = _context.Products
+                    .FirstOrDefault(p => p.Id == item.ProductId);
 
                 if (product == null)
                 {
@@ -103,10 +84,70 @@ namespace CMS_Backend.Controllers.API
                 product.StockQuantity -= item.Quantity;
                 product.SoldQuantity += item.Quantity;
 
-                totalAmount += product.Price * item.Quantity;
+                var itemTotal = product.Price * item.Quantity;
+                totalAmount += itemTotal;
+
+                productRows += $@"
+                    <tr>
+                        <td>{product.Name}</td>
+                        <td style='text-align:center'>{item.Quantity}</td>
+                        <td style='text-align:right'>{product.Price:N0} đ</td>
+                        <td style='text-align:right'>{itemTotal:N0} đ</td>
+                    </tr>";
             }
 
             _context.SaveChanges();
+
+            var receiveEmail = string.IsNullOrWhiteSpace(request.Email)
+                ? customer.Email
+                : request.Email;
+
+            var emailBody = $@"
+                <h2 style='color:#ef3f84'>LOI Cosmetics - Xác nhận đơn hàng</h2>
+
+                <p>Xin chào <strong>{request.FullName ?? customer.FullName}</strong>,</p>
+                <p>Cảm ơn bạn đã đặt hàng tại LOI Cosmetics.</p>
+
+                <p><strong>Mã đơn hàng:</strong> #{order.Id}</p>
+                <p><strong>Ngày đặt:</strong> {order.OrderDate:dd/MM/yyyy HH:mm}</p>
+                <p><strong>Email nhận đơn hàng:</strong> {receiveEmail}</p>
+                <p><strong>Họ tên người nhận:</strong> {request.FullName}</p>
+                <p><strong>Số điện thoại:</strong> {request.Phone}</p>
+                <p><strong>Địa chỉ giao hàng:</strong> {request.Address}</p>
+
+                <table border='1' cellpadding='8' cellspacing='0' style='border-collapse:collapse;width:100%;'>
+                    <thead>
+                        <tr style='background:#fff0f6'>
+                            <th>Sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Đơn giá</th>
+                            <th>Thành tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {productRows}
+                    </tbody>
+                </table>
+
+                <h3 style='text-align:right;color:#ef3f84'>
+                    Tổng tiền: {totalAmount:N0} đ
+                </h3>
+
+                <p>LOI Cosmetics sẽ liên hệ bạn để xác nhận đơn hàng trong thời gian sớm nhất.</p>
+            ";
+
+            try
+            {
+                await _emailService.SendEmailAsync(
+                    receiveEmail,
+                    "Xác nhận đơn hàng LOI Cosmetics",
+                    emailBody
+                );
+            }
+            catch
+            {
+                // Không làm thất bại đơn hàng nếu gửi email lỗi
+            }
 
             return Ok(new
             {
@@ -115,7 +156,8 @@ namespace CMS_Backend.Controllers.API
                 customerId = order.CustomerId,
                 orderDate = order.OrderDate,
                 status = order.Status,
-                totalAmount = totalAmount
+                totalAmount = totalAmount,
+                email = receiveEmail
             });
         }
 
@@ -151,7 +193,14 @@ namespace CMS_Backend.Controllers.API
     public class CreateOrderRequest
     {
         public int CustomerId { get; set; }
+
+        public string? FullName { get; set; }
+        public string? Email { get; set; }
+        public string? Phone { get; set; }
+        public string? Address { get; set; }
+
         public string? Notes { get; set; }
+
         public List<CreateOrderItemRequest> Items { get; set; }
     }
 

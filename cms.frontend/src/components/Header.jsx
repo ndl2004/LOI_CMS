@@ -1,10 +1,11 @@
-﻿import { Link } from "react-router-dom";
+﻿import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 function Header() {
     const [customer, setCustomer] = useState(null);
     const [cartCount, setCartCount] = useState(0);
-
+    const [keyword, setKeyword] = useState("");
+    const navigate = useNavigate();
     useEffect(() => {
         loadData();
 
@@ -43,7 +44,18 @@ function Header() {
 
         window.location.href = "/";
     };
+    const handleSearch = () => {
+        if (!keyword.trim()) return;
 
+        navigate(
+            `/search?keyword=${encodeURIComponent(keyword)}`
+        );
+    };
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter") {
+            handleSearch();
+        }
+    };
     return (
         <>
             <div className="top-banner">
@@ -61,8 +73,16 @@ function Header() {
                     </Link>
 
                     <div className="search-box">
-                        <input placeholder="Tìm serum, kem chống nắng, sữa rửa mặt..." />
-                        <button>🔍</button>
+                        <input
+                            value={keyword}
+                            onChange={(e) => setKeyword(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            placeholder="Tìm serum, kem chống nắng, sữa rửa mặt..."
+                        />
+
+                        <button onClick={handleSearch}>
+                            🔍
+                        </button>
                     </div>
 
                     <div className="header-actions">

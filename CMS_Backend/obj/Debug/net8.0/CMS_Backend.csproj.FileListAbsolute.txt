@@ -47,7 +47,9 @@ C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\CMS_Backend.pdb
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\Azure.Core.dll
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\Azure.Identity.dll
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\BCrypt-Net-Next.dll
+C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\Humanizer.dll
+C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\MailKit.dll
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\Microsoft.CodeAnalysis.dll
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\Microsoft.CodeAnalysis.CSharp.dll
@@ -77,6 +79,7 @@ C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\Microsoft.Identity
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\Microsoft.OpenApi.dll
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\Microsoft.SqlServer.Server.dll
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\MimeKit.dll
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\Mono.TextTemplating.dll
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
@@ -93,6 +96,7 @@ C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\System.Drawing.Com
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\System.Memory.Data.dll
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\System.Runtime.Caching.dll
+C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\System.Security.Cryptography.Pkcs.dll
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\System.Security.Permissions.dll
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\System.Windows.Extensions.dll
@@ -158,6 +162,7 @@ C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\runtimes\win\lib\n
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
+C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 C:\Users\PC\Source\Repos\LOI_CMS\CMS_Backend\bin\Debug\net8.0\CMS_Data.dll

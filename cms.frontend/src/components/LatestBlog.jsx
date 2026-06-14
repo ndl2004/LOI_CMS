@@ -1,4 +1,5 @@
 ﻿import { Link } from "react-router-dom";
+import { IMAGE_BASE_URL } from "../config";
 
 function LatestBlog({ posts }) {
     const getImageUrl = (imageUrl) => {
@@ -10,7 +11,7 @@ function LatestBlog({ posts }) {
             return imageUrl;
         }
 
-        return `https://localhost:7175${imageUrl}`;
+        return `${IMAGE_BASE_URL}${imageUrl}`;
     };
 
     const getShortContent = (content) => {

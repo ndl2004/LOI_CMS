@@ -56,7 +56,8 @@ namespace CMS_Backend.Controllers.API
                 {
                     c.Id,
                     c.Name,
-                    c.Description
+                    c.Description,
+                    c.ImageUrl
                 })
                 .ToList();
 

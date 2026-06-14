@@ -1,5 +1,6 @@
 ﻿import { useEffect, useState } from "react";
 import axiosClient from "../api/axiosClient";
+import { IMAGE_BASE_URL } from "../config";
 
 function HeroBanner() {
     const [banners, setBanners] = useState([]);
@@ -68,7 +69,7 @@ function HeroBanner() {
 
                     <div className="hero-image-box">
                         <img
-                            src={`https://localhost:7175${item.image}`}
+                            src={`${IMAGE_BASE_URL}${item.image}`}
                             alt={item.title}
                             className="hero-image"
                         />

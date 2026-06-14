@@ -1,7 +1,7 @@
 ﻿import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axiosClient from "../api/axiosClient";
-
+import { IMAGE_BASE_URL } from "../config";
 function ProductDetail() {
     const { id } = useParams();
 
@@ -26,7 +26,7 @@ function ProductDetail() {
     }
 
     const imageUrl = product.imageUrl
-        ? `https://localhost:7175${product.imageUrl}`
+        ? `${IMAGE_BASE_URL}${product.imageUrl}`
         : "https://via.placeholder.com/500x500?text=LOI+Cosmetics";
 
     const price = Number(product.price);

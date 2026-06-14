@@ -1,6 +1,7 @@
 ﻿import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axiosClient from "../api/axiosClient";
+import { IMAGE_BASE_URL } from "../config";
 
 function Checkout() {
     const navigate = useNavigate();
@@ -11,6 +12,7 @@ function Checkout() {
     const [loading, setLoading] = useState(false);
 
     const [fullName, setFullName] = useState("");
+    const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [address, setAddress] = useState("");
 
@@ -23,6 +25,7 @@ function Checkout() {
 
         if (customerData) {
             setFullName(customerData.fullName || "");
+            setEmail(customerData.email || "");
             setPhone(customerData.phone || "");
             setAddress(customerData.address || "");
         }
@@ -39,6 +42,16 @@ function Checkout() {
     const validateForm = () => {
         if (!fullName.trim()) {
             alert("Vui lòng nhập họ và tên người nhận");
+            return false;
+        }
+
+        if (!email.trim()) {
+            alert("Vui lòng nhập email nhận thông tin đơn hàng");
+            return false;
+        }
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+            alert("Email nhận đơn hàng không hợp lệ");
             return false;
         }
 
@@ -73,13 +86,12 @@ function Checkout() {
             return;
         }
 
-        if (!validateForm()) {
-            return;
-        }
+        if (!validateForm()) return;
 
         const orderData = {
             customerId: customer.id,
             fullName: fullName.trim(),
+            email: email.trim(),
             phone: phone.trim(),
             address: address.trim(),
             notes: notes,
@@ -103,7 +115,7 @@ function Checkout() {
             navigate("/orders");
         } catch (err) {
             console.error("Lỗi đặt hàng:", err);
-            alert("Đặt hàng thất bại. Vui lòng kiểm tra tồn kho hoặc đăng nhập lại.");
+            alert("Đặt hàng thất bại. Vui lòng kiểm tra tồn kho hoặc thông tin đơn hàng.");
         } finally {
             setLoading(false);
         }
@@ -115,7 +127,7 @@ function Checkout() {
                 <div className="checkout-header">
                     <div>
                         <h2>Thanh toán</h2>
-                        <p>Nhập đầy đủ thông tin giao hàng trước khi xác nhận</p>
+                        <p>Nhập đầy đủ thông tin giao hàng và email nhận đơn hàng</p>
                     </div>
 
                     <Link to="/cart" className="cart-back-link">
@@ -161,6 +173,17 @@ function Checkout() {
                                     </div>
 
                                     <div className="form-group">
+                                        <label>Email nhận đơn hàng *</label>
+                                        <input
+                                            type="email"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            placeholder="Nhập email nhận xác nhận đơn hàng"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
                                         <label>Số điện thoại *</label>
                                         <input
                                             type="text"
@@ -180,15 +203,6 @@ function Checkout() {
                                             required
                                         />
                                     </div>
-
-                                    <div className="form-group">
-                                        <label>Email tài khoản</label>
-                                        <input
-                                            type="text"
-                                            value={customer.email || ""}
-                                            readOnly
-                                        />
-                                    </div>
                                 </div>
                             </div>
 
@@ -198,7 +212,7 @@ function Checkout() {
                                 <div className="checkout-products">
                                     {cart.map((item) => {
                                         const imageUrl = item.imageUrl
-                                            ? `https://localhost:7175${item.imageUrl}`
+                                            ? `${IMAGE_BASE_URL}${item.imageUrl}`
                                             : "https://via.placeholder.com/300x300?text=LOI+Cosmetics";
 
                                         const itemTotal = Number(item.price) * item.quantity;
@@ -209,9 +223,7 @@ function Checkout() {
 
                                                 <div className="checkout-product-info">
                                                     <h4>{item.name}</h4>
-                                                    <p>
-                                                        {Number(item.price).toLocaleString("vi-VN")} đ
-                                                    </p>
+                                                    <p>{Number(item.price).toLocaleString("vi-VN")} đ</p>
                                                     <span>Số lượng: x{item.quantity}</span>
                                                 </div>
 
@@ -268,7 +280,7 @@ function Checkout() {
                             </button>
 
                             <p className="checkout-note-small">
-                                Các trường có dấu * là bắt buộc. Bạn có thể thay đổi thông tin giao hàng trước khi đặt hàng.
+                                Các trường có dấu * là bắt buộc. Email có thể thay đổi để nhận thông tin đơn hàng.
                             </p>
                         </div>
                     </div>

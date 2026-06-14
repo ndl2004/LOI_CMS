@@ -16,7 +16,8 @@
     <table class="table table-bordered table-hover shadow-sm">
         <thead class="table-light">
             <tr>
-                <th>ID</th>
+                <th width="70">ID</th>
+                <th width="140">Ảnh</th>
                 <th>Tên danh mục</th>
                 <th>Mô tả</th>
                 <th width="180">Thao tác</th>
@@ -28,19 +29,47 @@
             {
                 <tr>
                     <td>@item.Id</td>
-                    <td><strong>@item.Name</strong></td>
-                    <td>@item.Description</td>
+
+                    <td class="text-center">
+                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                        {
+                            <img src="@item.ImageUrl"
+                                 width="90"
+                                 height="90"
+                                 class="rounded-circle border"
+                                 style="object-fit: cover;" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">Chưa có ảnh</span>
+                        }
+                </td>
+
+                <td>
+                    <strong>@item.Name</strong>
+                </td>
+
+                <td>
+                    @(string.IsNullOrEmpty(item.Description)
+                                        ? "Chưa có mô tả"
+                                        : item.Description)
+                </td>
+
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
+                        <a asp-action="Edit"
+                           asp-route-id="@item.Id"
+                           class="btn btn-warning btn-sm">
                             <i class="bi bi-pencil"></i> Sửa
                         </a>
 
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                        <a asp-action="Delete"
+                           asp-route-id="@item.Id"
+                           class="btn btn-danger btn-sm">
                             <i class="bi bi-trash"></i> Xóa
                         </a>
                     </td>
                 </tr>
-            }
+                        }
         </tbody>
     </table>
 </div>

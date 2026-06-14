@@ -3,6 +3,7 @@ import axiosClient from "../api/axiosClient";
 import ProductCard from "../components/ProductCard";
 import LatestBlog from "../components/LatestBlog";
 import HeroBanner from "../components/HeroBanner";
+import { IMAGE_BASE_URL } from "../config";
 
 function Home() {
     const [categories, setCategories] = useState([]);
@@ -88,31 +89,45 @@ function Home() {
                         <h2>Danh mục mỹ phẩm</h2>
                     </div>
 
-                    <div className="category-list">
+                    <div className="category-card-list">
                         <button
                             className={
                                 selectedCategoryId === null
-                                    ? "category-pill active"
-                                    : "category-pill"
+                                    ? "category-card active"
+                                    : "category-card"
                             }
                             onClick={() => setSelectedCategoryId(null)}
                         >
-                            Tất cả
+                            <div className="category-card-img">
+                                ✨
+                            </div>
+
+                            <span>Tất cả</span>
                         </button>
 
-                        {categories.map((cat) => (
-                            <button
-                                className={
-                                    selectedCategoryId === cat.id
-                                        ? "category-pill active"
-                                        : "category-pill"
-                                }
-                                key={cat.id}
-                                onClick={() => setSelectedCategoryId(cat.id)}
-                            >
-                                {cat.name}
-                            </button>
-                        ))}
+                        {categories.map((cat) => {
+                            const imageUrl = cat.imageUrl
+                                ? `${IMAGE_BASE_URL}${cat.imageUrl}`
+                                : "https://via.placeholder.com/120x120?text=LOI";
+
+                            return (
+                                <button
+                                    key={cat.id}
+                                    className={
+                                        selectedCategoryId === cat.id
+                                            ? "category-card active"
+                                            : "category-card"
+                                    }
+                                    onClick={() => setSelectedCategoryId(cat.id)}
+                                >
+                                    <div className="category-card-img">
+                                        <img src={imageUrl} alt={cat.name} />
+                                    </div>
+
+                                    <span>{cat.name}</span>
+                                </button>
+                            );
+                        })}
                     </div>
                 </section>
 

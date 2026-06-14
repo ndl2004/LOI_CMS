@@ -1,18 +1,4 @@
-﻿/*
- * Họ tên: Nguyễn Đình Lợi
- * MSSV: 2122110147
- * Lớp: CCQ2211D
- * Ngày tạo: 29/05/2026
- * Mô tả:
- * Controller dùng để quản lý danh mục sản phẩm trong hệ thống CMS.
- * Chức năng:
- * - Hiển thị danh sách danh mục sản phẩm
- * - Thêm danh mục sản phẩm mới
- * - Chỉnh sửa danh mục sản phẩm
- * - Xóa danh mục sản phẩm
- */
-
-using CMS.Data;
+﻿using CMS.Data;
 using CMS.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,56 +6,41 @@ namespace CMS.Backend.Controllers
 {
     public class CategoryProductController : Controller
     {
-        // Biến kết nối Database
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _environment;
 
-        /// <summary>
-        /// Hàm khởi tạo Controller
-        /// Dependency Injection sẽ tự động truyền DbContext vào
-        /// </summary>
-        public CategoryProductController(ApplicationDbContext context)
+        public CategoryProductController(
+            ApplicationDbContext context,
+            IWebHostEnvironment environment)
         {
             _context = context;
+            _environment = environment;
         }
 
-        // ==================================================
-        // HIỂN THỊ DANH SÁCH DANH MỤC SẢN PHẨM
-        // ==================================================
-
-        /// <summary>
-        /// Hiển thị toàn bộ danh mục sản phẩm
-        /// </summary>
         public IActionResult Index()
         {
             var data = _context.CategoriesProducts.ToList();
-
             return View(data);
         }
 
-        // ==================================================
-        // THÊM DANH MỤC SẢN PHẨM
-        // ==================================================
-
-        /// <summary>
-        /// Hiển thị form thêm danh mục sản phẩm
-        /// </summary>
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
-        /// <summary>
-        /// Lưu danh mục sản phẩm mới xuống Database
-        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(CategoryProduct model)
+        public IActionResult Create(CategoryProduct model, IFormFile? ImageFile)
         {
+            if (ImageFile != null && ImageFile.Length > 0)
+            {
+                model.ImageUrl = UploadCategoryImage(ImageFile);
+            }
+
             if (ModelState.IsValid)
             {
                 _context.CategoriesProducts.Add(model);
-
                 _context.SaveChanges();
 
                 return RedirectToAction("Index");
@@ -78,13 +49,6 @@ namespace CMS.Backend.Controllers
             return View(model);
         }
 
-        // ==================================================
-        // CHỈNH SỬA DANH MỤC SẢN PHẨM
-        // ==================================================
-
-        /// <summary>
-        /// Hiển thị form chỉnh sửa
-        /// </summary>
         [HttpGet]
         public IActionResult Edit(int id)
         {
@@ -98,32 +62,30 @@ namespace CMS.Backend.Controllers
             return View(categoryProduct);
         }
 
-        /// <summary>
-        /// Cập nhật dữ liệu danh mục sản phẩm
-        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(CategoryProduct model)
+        public IActionResult Edit(CategoryProduct model, IFormFile? ImageFile)
         {
-            if (ModelState.IsValid)
+            var existingCategory = _context.CategoriesProducts.Find(model.Id);
+
+            if (existingCategory == null)
             {
-                _context.CategoriesProducts.Update(model);
-
-                _context.SaveChanges();
-
-                return RedirectToAction("Index");
+                return NotFound();
             }
 
-            return View(model);
+            existingCategory.Name = model.Name;
+            existingCategory.Description = model.Description;
+
+            if (ImageFile != null && ImageFile.Length > 0)
+            {
+                existingCategory.ImageUrl = UploadCategoryImage(ImageFile);
+            }
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
         }
 
-        // ==================================================
-        // XÓA DANH MỤC SẢN PHẨM
-        // ==================================================
-
-        /// <summary>
-        /// Hiển thị trang xác nhận xóa
-        /// </summary>
         [HttpGet]
         public IActionResult Delete(int id)
         {
@@ -137,9 +99,6 @@ namespace CMS.Backend.Controllers
             return View(categoryProduct);
         }
 
-        /// <summary>
-        /// Thực hiện xóa danh mục sản phẩm
-        /// </summary>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
@@ -149,11 +108,37 @@ namespace CMS.Backend.Controllers
             if (categoryProduct != null)
             {
                 _context.CategoriesProducts.Remove(categoryProduct);
-
                 _context.SaveChanges();
             }
 
             return RedirectToAction("Index");
+        }
+
+        private string UploadCategoryImage(IFormFile imageFile)
+        {
+            string uploadFolder = Path.Combine(
+                _environment.WebRootPath,
+                "uploads",
+                "categories"
+            );
+
+            if (!Directory.Exists(uploadFolder))
+            {
+                Directory.CreateDirectory(uploadFolder);
+            }
+
+            string fileName =
+                Guid.NewGuid().ToString() +
+                Path.GetExtension(imageFile.FileName);
+
+            string filePath = Path.Combine(uploadFolder, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                imageFile.CopyTo(stream);
+            }
+
+            return "/uploads/categories/" + fileName;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿import { Link, useNavigate } from "react-router-dom";
+import { IMAGE_BASE_URL } from "../config";
 
 function ProductCard({
     product,
@@ -9,7 +10,7 @@ function ProductCard({
     const navigate = useNavigate();
 
     const imageUrl = product.imageUrl
-        ? `https://localhost:7175${product.imageUrl}`
+        ? `${IMAGE_BASE_URL}${product.imageUrl}`
         : "https://via.placeholder.com/400x400?text=LOI+Cosmetics";
 
     const originalPrice = Number(product.price);
@@ -38,28 +39,16 @@ function ProductCard({
         }
 
         localStorage.setItem("cart", JSON.stringify(cart));
-
-        window.dispatchEvent(
-            new Event("cartUpdated")
-        );
+        window.dispatchEvent(new Event("cartUpdated"));
 
         navigate("/checkout");
     };
 
     return (
         <div className="product-card">
-
             {tag && (
-                <span
-                    className={
-                        tag === "HOT"
-                            ? "hot-tag"
-                            : "best-tag"
-                    }
-                >
-                    {tag === "HOT"
-                        ? "🔥 HOT"
-                        : "⭐ BEST SELLER"}
+                <span className={tag === "HOT" ? "hot-tag" : "best-tag"}>
+                    {tag === "HOT" ? "🔥 HOT" : "⭐ BEST SELLER"}
                 </span>
             )}
 
@@ -70,10 +59,7 @@ function ProductCard({
             )}
 
             <div className="product-img">
-                <img
-                    src={imageUrl}
-                    alt={product.name}
-                />
+                <img src={imageUrl} alt={product.name} />
             </div>
 
             <div className="product-info">
@@ -100,21 +86,13 @@ function ProductCard({
                 </div>
 
                 <div className="product-actions">
-
-                    <Link
-                        className="btn-detail"
-                        to={`/product/${product.id}`}
-                    >
+                    <Link className="btn-detail" to={`/product/${product.id}`}>
                         Xem chi tiết
                     </Link>
 
-                    <button
-                        className="btn-buy-now"
-                        onClick={handleBuyNow}
-                    >
+                    <button className="btn-buy-now" onClick={handleBuyNow}>
                         Mua ngay
                     </button>
-
                 </div>
             </div>
         </div>

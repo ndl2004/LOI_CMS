@@ -42,6 +42,54 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "CMS_Backend.Controllers.API.AuthController",
+    "Method": "ResetPasswordWithOtp",
+    "RelativePath": "api/Auth/ResetPasswordWithOtp",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CMS_Backend.Controllers.API.ResetPasswordWithOtpRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CMS_Backend.Controllers.API.AuthController",
+    "Method": "SendForgotPasswordOtp",
+    "RelativePath": "api/Auth/SendForgotPasswordOtp",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CMS_Backend.Controllers.API.ForgotPasswordOtpRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CMS_Backend.Controllers.API.AuthController",
+    "Method": "UpdateProfile",
+    "RelativePath": "api/Auth/UpdateProfile",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CMS_Backend.Controllers.API.UpdateProfileRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "CMS_Backend.Controllers.API.CategoriesProductsController",
     "Method": "GetAll",
     "RelativePath": "api/CategoriesProducts",
@@ -163,6 +211,43 @@
         "Name": "categoryProductId",
         "Type": "System.Int32",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CMS_Backend.Controllers.API.ProductsController",
+    "Method": "FilterByPrice",
+    "RelativePath": "api/Products/filter-price",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "minPrice",
+        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "maxPrice",
+        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CMS_Backend.Controllers.API.ProductsController",
+    "Method": "Search",
+    "RelativePath": "api/Products/search",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "keyword",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

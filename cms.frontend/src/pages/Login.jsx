@@ -11,7 +11,7 @@ function Login() {
     });
 
     const [loading, setLoading] = useState(false);
-
+    const [showPassword, setShowPassword] = useState(false);
     const handleChange = (e) => {
         setForm({
             ...form,
@@ -55,7 +55,6 @@ function Login() {
         }
         catch (err) {
             console.error(err);
-
             alert("Email hoặc mật khẩu không đúng");
         }
         finally {
@@ -80,14 +79,29 @@ function Login() {
                         required
                     />
 
-                    <input
-                        name="password"
-                        type="password"
-                        placeholder="Mật khẩu"
-                        value={form.password}
-                        onChange={handleChange}
-                        required
-                    />
+                    <div className="password-wrapper">
+                        <input
+                            name="password"
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Mật khẩu"
+                            value={form.password}
+                            onChange={handleChange}
+                            required
+                        />
+
+                        <span
+                            className="password-eye"
+                            onClick={() => setShowPassword(!showPassword)}
+                        >
+                            {showPassword ? "🙈" : "👁"}
+                        </span>
+                    </div>
+
+                    <div className="auth-extra-link">
+                        <Link to="/forgot-password">
+                            Quên mật khẩu?
+                        </Link>
+                    </div>
 
                     <button
                         type="submit"

@@ -26,7 +26,8 @@ namespace CMS_Backend.Controllers.API
                     p.Price,
                     p.ImageUrl,
                     p.CategoryProductId,
-                    p.SoldQuantity
+                    p.SoldQuantity,
+                    p.StockQuantity
                 })
                 .ToList();
 
@@ -45,7 +46,71 @@ namespace CMS_Backend.Controllers.API
                     p.Price,
                     p.ImageUrl,
                     p.CategoryProductId,
-                    p.SoldQuantity
+                    p.SoldQuantity,
+                    p.StockQuantity
+                })
+                .ToList();
+
+            return Ok(products);
+        }
+
+        [HttpGet("search")]
+        public IActionResult Search(string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                return Ok(new List<object>());
+            }
+
+            keyword = keyword.Trim();
+
+            var products = _context.Products
+                .Where(p =>
+                    p.Name.Contains(keyword) ||
+                    (p.Description != null && p.Description.Contains(keyword))
+                )
+                .Select(p => new
+                {
+                    p.Id,
+                    p.Name,
+                    p.Price,
+                    p.ImageUrl,
+                    p.CategoryProductId,
+                    p.SoldQuantity,
+                    p.StockQuantity
+                })
+                .ToList();
+
+            return Ok(products);
+        }
+
+        [HttpGet("filter-price")]
+        public IActionResult FilterByPrice(
+            [FromQuery] decimal? minPrice,
+            [FromQuery] decimal? maxPrice)
+        {
+            var query = _context.Products.AsQueryable();
+
+            if (minPrice.HasValue)
+            {
+                query = query.Where(p => p.Price >= minPrice.Value);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                query = query.Where(p => p.Price <= maxPrice.Value);
+            }
+
+            var products = query
+                .Select(p => new
+                {
+                    p.Id,
+                    p.Name,
+                    p.Price,
+                    p.ImageUrl,
+                    p.CategoryProductId,
+                    p.SoldQuantity,
+                    p.StockQuantity
                 })
                 .ToList();
 

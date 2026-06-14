@@ -4,7 +4,8 @@ import axiosClient from "../api/axiosClient";
 
 function Register() {
     const navigate = useNavigate();
-
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [form, setForm] = useState({
         fullName: "",
         email: "",
@@ -88,23 +89,67 @@ function Register() {
                         required
                     />
 
-                    <input
-                        name="password"
-                        type="password"
-                        placeholder="Mật khẩu"
-                        minLength="6"
-                        onChange={handleChange}
-                        required
-                    />
+                    <div className="password-wrapper">
+                        <input
+                            name="password"
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Mật khẩu"
+                            minLength="6"
+                            value={form.password}
+                            onChange={handleChange}
+                            required
+                        />
 
-                    <input
-                        name="confirmPassword"
-                        type="password"
-                        placeholder="Nhập lại mật khẩu"
-                        minLength="6"
-                        onChange={handleChange}
-                        required
-                    />
+                        <span
+                            className="password-eye"
+                            onClick={() => setShowPassword(!showPassword)}
+                        >
+                            {showPassword ? "🙈" : "👁"}
+                        </span>
+                    </div>
+
+                    <div className="password-wrapper">
+                        <input
+                            name="confirmPassword"
+                            type={
+                                showConfirmPassword
+                                    ? "text"
+                                    : "password"
+                            }
+                            placeholder="Nhập lại mật khẩu"
+                            minLength="6"
+                            value={form.confirmPassword}
+                            onChange={handleChange}
+                            required
+                        />
+
+                        <span
+                            className="password-eye"
+                            onClick={() =>
+                                setShowConfirmPassword(
+                                    !showConfirmPassword
+                                )
+                            }
+                        >
+                            {showConfirmPassword ? "🙈" : "👁"}
+                        </span>
+                        {
+                            form.confirmPassword &&
+                            (
+                                form.password === form.confirmPassword
+                                    ? (
+                                        <div className="password-match success">
+                                            ✓ Mật khẩu khớp
+                                        </div>
+                                    )
+                                    : (
+                                        <div className="password-match error">
+                                            ✗ Mật khẩu không khớp
+                                        </div>
+                                    )
+                            )
+                        }
+                    </div>
 
                     <button type="submit">
                         Đăng ký
