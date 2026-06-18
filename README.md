@@ -1,76 +1,32 @@
-# API & BACKEND DEVELOPMENT (BUỔI 06)
+# 🚀 LOI_CMS - PHÁT TRIỂN API & FRONTEND (BUỔI 10)
 
-Trong buổi 06, project tập trung phát triển phần Backend và Data nhằm chuẩn bị cho việc kết nối ReactJS Frontend với hệ thống CMS thông qua API.
+Chào mừng bạn đến với cập nhật của **Buổi 10** trong dự án **LOI_CMS**. Trong buổi này, hệ thống tập trung cải tiến mạnh mẽ vào trải nghiệm người dùng (UX) ở giao diện Frontend, đồng thời bổ sung các tính năng bảo mật quan trọng (Authentication) và quản lý tài nguyên đa phương tiện ở Backend.
 
-## Nội dung đã thực hiện
+---
 
-* Xây dựng các API Controller bằng ASP.NET Core Web API
-* Tạo `PostsController` để cung cấp dữ liệu bài viết dưới dạng JSON
-* Sử dụng `[ApiController]` và `[Route("api/[controller]")]`
-* Sử dụng `ControllerBase` thay cho `Controller` trong API
-* Kết nối API với `ApplicationDbContext`
-* Truy vấn dữ liệu bằng Entity Framework Core và LINQ
-* Xây dựng API lấy toàn bộ danh sách bài viết:
+## 📌 Các Tính Năng Mới & Cập Nhật (Buổi 10)
 
-  * `GET /api/posts`
-* Xây dựng API lấy bài viết theo ID:
+### 1. Nâng Cấp Giao Diện & UX (Header)
+* **Sticky Header:** Cấu hình thanh điều hướng luôn cố định ở trên cùng khi cuộn trang, giúp tối ưu không gian trải nghiệm và truy cập menu nhanh chóng.
+* **Instant Search & Render:** Tích hợp bộ lọc tìm kiếm thông minh ngay trên Header. Kết quả tìm kiếm được xử lý và hiển thị (render) ngay lập tức khi người dùng nhập từ khóa mà không cần tải lại trang.
 
-  * `GET /api/posts/{id}`
-* Xây dựng API lấy bài viết theo danh mục:
+### 2. Tính Năng Xác Thực & Hệ Thống (Authentication & Mail)
+* **Forgot Password:** Xây dựng luồng khôi phục tài khoản hoàn chỉnh cho người dùng khi quên mật khẩu.
+* **Send Email:** Tích hợp dịch vụ gửi Email tự động từ hệ thống để cấp mã xác thực hoặc liên kết đặt lại mật khẩu bảo mật.
 
-  * `GET /api/posts/category/{id}`
-* Sử dụng `.Where()`, `.Select()`, `.OrderByDescending()` trong LINQ
-* Tối ưu dữ liệu trả về bằng cách chỉ lấy các trường cần thiết:
+### 3. Quản Lý Đa Phương Tiện
+* **Image Management / Processing:** Bổ sung module xử lý hình ảnh, cho phép tối ưu hóa dung lượng, kiểm tra định dạng và quản lý ảnh tải lên cho các bài viết CMS.
 
-  * Id
-  * Title
-  * ImageUrl
-  * CreatedDate
-  * CategoryName
-* Trả dữ liệu dưới dạng JSON cho Frontend ReactJS
-* Kiểm tra API bằng trình duyệt và Swagger
+---
 
-## Cấu hình Swagger
+## 📂 Cấu Trúc Thư Mục Dự Án
 
-Trong buổi 06, project đã được bổ sung Swagger để test API trực tiếp.
+Dự án được phân chia rõ ràng thành các phân hệ chính sau:
 
-Đã cấu hình:
-
-* `AddSwaggerGen()`
-* `UseSwagger()`
-* `UseSwaggerUI()`
-* `MapControllers()`
-
-Nhờ đó có thể kiểm tra API tại:
-
-```txt
-/swagger
-```
-
-## Xử lý dữ liệu và kiểm tra lỗi
-
-* Kiểm tra bài viết tồn tại hay không
-* Trả về lỗi `404 Not Found` khi không tìm thấy dữ liệu
-* Trả về JSON message thông báo lỗi
-* Thực hành test nhiều kịch bản API khác nhau
-
-## Kết quả đạt được
-
-Sau buổi 06, hệ thống đã:
-
-* Có thể hoạt động như một RESTful API Backend
-* Trả dữ liệu bài viết dạng JSON
-* Kết nối được với Entity Framework Core
-* Sẵn sàng cho việc kết nối ReactJS Frontend
-* Có Swagger để kiểm tra API nhanh chóng
-* Tách rõ Backend API và giao diện Frontend
-
-## Công nghệ sử dụng
-
-* ASP.NET Core Web API
-* Entity Framework Core
-* LINQ
-* Swagger / Swashbuckle
-* SQL Server
-* JSON API
-* Dependency Injection
+```text
+LOI_CMS/
+├── CMS_Backend/      # ASP.NET Core Web API (Xử lý Logic, Email, Image API)
+├── CMS_Data/         # Entity Framework Core, SQL Server Migrations & Models
+├── cms.frontend/     # Ứng dụng ReactJS (Giao diện, Sticky Header, Instant Search)
+├── public/           # Tài nguyên tĩnh toàn cục
+└── src/              # Mã nguồn bổ trợ
