@@ -412,3 +412,196 @@ Các yêu cầu đã đáp ứng trong source code:
 ## Kết luận
 
 Dự án LOI_CMS đã hoàn thiện phần lớn các yêu cầu chức năng của một website bán mỹ phẩm kết hợp hệ thống quản trị nội dung. Dự án có đầy đủ backend MVC, Web API, frontend ReactJS, cơ sở dữ liệu SQL Server, bảo mật đăng nhập, phân quyền, giỏ hàng, đặt hàng, email, CKEditor, flash sale và các chức năng lọc/tìm kiếm phục vụ trải nghiệm người dùng.
+
+## Kiến trúc hệ thống
+
+Hệ thống được xây dựng theo mô hình 3 tầng (Three-Layer Architecture) nhằm đảm bảo tính tách biệt giữa giao diện, nghiệp vụ và dữ liệu.
+
+```text
+┌──────────────────────────┐
+│      ReactJS Frontend    │
+│  (Giao diện người dùng)  │
+└────────────┬─────────────┘
+             │ HTTP/Axios
+             ▼
+┌──────────────────────────┐
+│ ASP.NET Core MVC/Web API │
+│   (Business Logic Layer) │
+└────────────┬─────────────┘
+             │ EF Core
+             ▼
+┌──────────────────────────┐
+│      SQL Server DB       │
+│      (Data Layer)        │
+└──────────────────────────┘
+```
+
+Người dùng tương tác với giao diện ReactJS. Frontend gửi yêu cầu đến ASP.NET Core Web API thông qua Axios. Backend xử lý nghiệp vụ, truy cập cơ sở dữ liệu thông qua Entity Framework Core và trả kết quả về cho frontend hiển thị.
+
+---
+
+## Luồng xử lý đặt hàng
+
+Quy trình đặt hàng được triển khai theo các bước:
+
+```text
+Khách hàng
+    │
+    ▼
+Thêm sản phẩm vào giỏ hàng
+    │
+    ▼
+Checkout
+    │
+    ▼
+API Orders
+    │
+    ├─ Kiểm tra tồn kho
+    ├─ Tính tổng tiền
+    ├─ Tạo Order
+    ├─ Tạo OrderDetail
+    ├─ Trừ tồn kho
+    ├─ Cập nhật Flash Sale
+    └─ Gửi Email xác nhận
+    │
+    ▼
+Đặt hàng thành công
+```
+
+Hệ thống đảm bảo dữ liệu đơn hàng được lưu đầy đủ, đồng thời tự động cập nhật số lượng tồn kho và trạng thái Flash Sale.
+
+---
+
+## Thiết kế cơ sở dữ liệu
+
+Các bảng dữ liệu chính trong hệ thống:
+
+```text
+Users
+Customers
+Categories
+Posts
+CategoryProducts
+Products
+Orders
+OrderDetails
+Advertisements
+FlashSales
+FlashSaleItems
+```
+
+Mối quan hệ dữ liệu:
+
+```text
+Customer
+   │
+   └── Orders
+            │
+            └── OrderDetails
+                        │
+                        └── Product
+
+CategoryProduct
+        │
+        └── Products
+
+Category
+    │
+    └── Posts
+
+FlashSale
+    │
+    └── FlashSaleItems
+                    │
+                    └── Product
+```
+
+Hệ thống sử dụng Entity Framework Core Code First kết hợp Migration để quản lý và đồng bộ cơ sở dữ liệu.
+
+---
+
+## Các tính năng nổi bật
+
+### Flash Sale theo thời gian thực
+
+* Quản lý chương trình khuyến mãi theo thời gian.
+* Không cho phép tạo Flash Sale bị trùng thời gian hiệu lực.
+* Theo dõi số lượng sản phẩm được bán trong chương trình.
+* Tự động hiển thị hoặc ẩn Flash Sale theo thời gian thực.
+* Lưu snapshot giá tại thời điểm khách hàng mua hàng.
+
+### CMS quản trị nội dung
+
+* Quản lý bài viết và danh mục bài viết.
+* Soạn thảo nội dung bằng CKEditor.
+* Upload hình ảnh trực tiếp trong nội dung bài viết.
+* Hiển thị nội dung HTML phía frontend.
+
+### Hệ thống email tự động
+
+Email được gửi trong các trường hợp:
+
+* Gửi OTP quên mật khẩu.
+* Xác nhận đặt hàng thành công.
+* Thông báo thay đổi trạng thái đơn hàng.
+* Thông báo hủy đơn hàng.
+
+---
+
+## Bảo mật hệ thống
+
+Các cơ chế bảo mật đã được áp dụng:
+
+* Mã hóa mật khẩu bằng BCrypt.
+* Cookie Authentication cho khu vực quản trị.
+* Authorize Attribute bảo vệ các trang quản trị.
+* Role-Based Authorization cho tài khoản Admin.
+* Xác thực OTP khi đổi mật khẩu.
+* Kiểm tra dữ liệu đầu vào bằng Validation.
+* Phân quyền chức năng theo vai trò người dùng.
+
+---
+
+## Kết quả đạt được
+
+Sau quá trình xây dựng và hoàn thiện, hệ thống đã đáp ứng các chức năng chính của một website thương mại điện tử kết hợp CMS:
+
+✅ Quản lý sản phẩm
+
+✅ Quản lý bài viết
+
+✅ Quản lý khách hàng
+
+✅ Quản lý đơn hàng
+
+✅ Flash Sale
+
+✅ Gửi Email tự động
+
+✅ Đăng ký và đăng nhập khách hàng
+
+✅ Quên mật khẩu bằng OTP
+
+✅ Phân quyền quản trị
+
+✅ Giỏ hàng và đặt hàng
+
+✅ Tìm kiếm và lọc sản phẩm
+
+✅ Website ReactJS kết nối ASP.NET Core Web API
+
+---
+
+## Hướng phát triển
+
+Trong tương lai, hệ thống có thể được mở rộng thêm các chức năng:
+
+* Tích hợp thanh toán trực tuyến VNPay.
+* Tích hợp thanh toán MoMo.
+* Đăng nhập bằng Google OAuth.
+* Tích hợp Redis Cache để tăng hiệu năng.
+* Dashboard thống kê doanh thu bằng biểu đồ.
+* Tích hợp Elasticsearch cho tìm kiếm nâng cao.
+* Đóng gói bằng Docker và triển khai Cloud.
+* Xây dựng ứng dụng Mobile App sử dụng chung API.
+
