@@ -345,8 +345,8 @@ Role = Admin
 Ví dụ thông tin nên chuẩn bị trước khi demo:
 
 ```txt
-Username: admin
-Password: <mật khẩu demo>
+Username: admin_loi1
+Password: 123456
 Role: Admin
 ```
 
@@ -408,35 +408,6 @@ Các yêu cầu đã đáp ứng trong source code:
 - `.env` cấu hình API/image URL: đã có.
 - Forgot password: đã có.
 
-Các phần cần chuẩn bị riêng khi làm báo cáo `.docx`:
-
-- Bìa, mục lục, thông tin sinh viên.
-- 6 chương nội dung báo cáo.
-- Sơ đồ ERD.
-- Danh sách màn hình frontend kèm ảnh minh chứng.
-- Danh sách API kèm JSON mẫu đầy đủ.
-- Ảnh Swagger.
-- Ảnh test Postman.
-- Nhận xét quá trình làm việc nhóm, tiến độ Git, demo và tự học.
-
-## Ghi chú GitHub
-
-Các thư mục không nên đưa lên GitHub:
-
-```txt
-node_modules/
-bin/
-obj/
-build/
-.vs/
-```
-
-Các file môi trường có chứa thông tin nhạy cảm nên cân nhắc trước khi public:
-
-```txt
-CMS_Backend/appsettings.json
-cms.frontend/.env
-```
 
 ## Kết luận
 
