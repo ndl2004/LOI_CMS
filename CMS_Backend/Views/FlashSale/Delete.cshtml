@@ -1,0 +1,20 @@
+@model CMS.Data.Entities.FlashSale
+
+@{
+    Layout = "_LayoutAdmin";
+}
+
+<h2>Xóa Flash Sale</h2>
+
+<div class="alert alert-warning">
+    Bạn có chắc muốn xóa chương trình <strong>@Model.Name</strong> không?
+    Tất cả sản phẩm trong chương trình này cũng sẽ bị xóa khỏi flash sale.
+</div>
+
+<form asp-action="Delete" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+</form>

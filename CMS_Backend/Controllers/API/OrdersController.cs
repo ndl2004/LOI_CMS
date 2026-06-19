@@ -2,6 +2,7 @@
 using CMS.Data;
 using CMS.Data.Entities;
 using CMS_Backend.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace CMS_Backend.Controllers.API
 {
@@ -36,11 +37,29 @@ namespace CMS_Backend.Controllers.API
                 return BadRequest(new { message = "Giỏ hàng không có sản phẩm" });
             }
 
+            using var transaction = _context.Database.BeginTransaction();
+
+            var receiveEmail = string.IsNullOrWhiteSpace(request.Email)
+                ? customer.Email
+                : request.Email;
+
             var order = new Order
             {
                 CustomerId = request.CustomerId,
                 OrderDate = DateTime.Now,
                 Status = 0,
+                ReceiverName = string.IsNullOrWhiteSpace(request.FullName)
+                    ? customer.FullName
+                    : request.FullName.Trim(),
+                ReceiverEmail = receiveEmail,
+                ReceiverPhone = string.IsNullOrWhiteSpace(request.Phone)
+                    ? customer.Phone
+                    : request.Phone.Trim(),
+                ShippingAddress = string.IsNullOrWhiteSpace(request.Address)
+                    ? customer.Address
+                    : request.Address.Trim(),
+                ShippingFee = 0,
+                PaymentMethod = "COD",
                 Notes = request.Notes
             };
 
@@ -71,12 +90,48 @@ namespace CMS_Backend.Controllers.API
                     });
                 }
 
+                var now = DateTime.Now;
+                var flashSaleItem = _context.FlashSaleItems
+                    .Include(x => x.FlashSale)
+                    .FirstOrDefault(x =>
+                        x.ProductId == product.Id &&
+                        x.FlashSale != null &&
+                        x.FlashSale.IsActive &&
+                        x.FlashSale.StartTime <= now &&
+                        x.FlashSale.EndTime >= now);
+
+                if (flashSaleItem != null &&
+                    flashSaleItem.SaleQuantity > 0 &&
+                    flashSaleItem.SoldQuantity + item.Quantity > flashSaleItem.SaleQuantity)
+                {
+                    return BadRequest(new
+                    {
+                        message = $"Sản phẩm {product.Name} không đủ số lượng khuyến mãi"
+                    });
+                }
+
+                var unitPrice = product.Price;
+                var isFlashSale = false;
+                var discountPercent = 0;
+
+                if (flashSaleItem != null)
+                {
+                    unitPrice = product.Price - (product.Price * flashSaleItem.DiscountPercent / 100);
+                    isFlashSale = true;
+                    discountPercent = flashSaleItem.DiscountPercent;
+                    flashSaleItem.SoldQuantity += item.Quantity;
+                }
+
                 var orderDetail = new OrderDetail
                 {
                     OrderId = order.Id,
                     ProductId = product.Id,
+                    ProductName = product.Name,
                     Quantity = item.Quantity,
-                    UnitPrice = product.Price
+                    UnitPrice = unitPrice,
+                    OriginalPrice = product.Price,
+                    DiscountPercent = discountPercent,
+                    IsFlashSale = isFlashSale
                 };
 
                 _context.OrderDetails.Add(orderDetail);
@@ -84,36 +139,35 @@ namespace CMS_Backend.Controllers.API
                 product.StockQuantity -= item.Quantity;
                 product.SoldQuantity += item.Quantity;
 
-                var itemTotal = product.Price * item.Quantity;
+                var itemTotal = unitPrice * item.Quantity;
                 totalAmount += itemTotal;
 
                 productRows += $@"
                     <tr>
                         <td>{product.Name}</td>
                         <td style='text-align:center'>{item.Quantity}</td>
-                        <td style='text-align:right'>{product.Price:N0} đ</td>
+                        <td style='text-align:right'>{unitPrice:N0} đ</td>
                         <td style='text-align:right'>{itemTotal:N0} đ</td>
                     </tr>";
             }
 
-            _context.SaveChanges();
+            order.TotalAmount = totalAmount + order.ShippingFee;
 
-            var receiveEmail = string.IsNullOrWhiteSpace(request.Email)
-                ? customer.Email
-                : request.Email;
+            _context.SaveChanges();
+            transaction.Commit();
 
             var emailBody = $@"
                 <h2 style='color:#ef3f84'>LOI Cosmetics - Xác nhận đơn hàng</h2>
 
-                <p>Xin chào <strong>{request.FullName ?? customer.FullName}</strong>,</p>
+                <p>Xin chào <strong>{order.ReceiverName}</strong>,</p>
                 <p>Cảm ơn bạn đã đặt hàng tại LOI Cosmetics.</p>
 
                 <p><strong>Mã đơn hàng:</strong> #{order.Id}</p>
                 <p><strong>Ngày đặt:</strong> {order.OrderDate:dd/MM/yyyy HH:mm}</p>
-                <p><strong>Email nhận đơn hàng:</strong> {receiveEmail}</p>
-                <p><strong>Họ tên người nhận:</strong> {request.FullName}</p>
-                <p><strong>Số điện thoại:</strong> {request.Phone}</p>
-                <p><strong>Địa chỉ giao hàng:</strong> {request.Address}</p>
+                <p><strong>Email nhận đơn hàng:</strong> {order.ReceiverEmail}</p>
+                <p><strong>Họ tên người nhận:</strong> {order.ReceiverName}</p>
+                <p><strong>Số điện thoại:</strong> {order.ReceiverPhone}</p>
+                <p><strong>Địa chỉ giao hàng:</strong> {order.ShippingAddress}</p>
 
                 <table border='1' cellpadding='8' cellspacing='0' style='border-collapse:collapse;width:100%;'>
                     <thead>
@@ -130,7 +184,7 @@ namespace CMS_Backend.Controllers.API
                 </table>
 
                 <h3 style='text-align:right;color:#ef3f84'>
-                    Tổng tiền: {totalAmount:N0} đ
+                    Tổng tiền: {order.TotalAmount:N0} đ
                 </h3>
 
                 <p>LOI Cosmetics sẽ liên hệ bạn để xác nhận đơn hàng trong thời gian sớm nhất.</p>
@@ -156,8 +210,8 @@ namespace CMS_Backend.Controllers.API
                 customerId = order.CustomerId,
                 orderDate = order.OrderDate,
                 status = order.Status,
-                totalAmount = totalAmount,
-                email = receiveEmail
+                totalAmount = order.TotalAmount,
+                email = order.ReceiverEmail
             });
         }
 
@@ -173,16 +227,34 @@ namespace CMS_Backend.Controllers.API
                     o.OrderDate,
                     o.Status,
                     o.Notes,
+                    o.ReceiverName,
+                    o.ReceiverEmail,
+                    o.ReceiverPhone,
+                    o.ShippingAddress,
+                    o.ShippingFee,
+                    o.PaymentMethod,
                     Details = o.OrderDetails.Select(d => new
                     {
                         d.Id,
                         d.ProductId,
-                        ProductName = d.Product != null ? d.Product.Name : "",
+                        ProductName = !string.IsNullOrWhiteSpace(d.ProductName)
+                            ? d.ProductName
+                            : d.Product != null ? d.Product.Name : "",
                         d.Quantity,
                         d.UnitPrice,
+                        OriginalPrice = d.OriginalPrice > 0
+                            ? d.OriginalPrice
+                            : d.Product != null ? d.Product.Price : d.UnitPrice,
+                        d.DiscountPercent,
+                        IsFlashSale = d.IsFlashSale ||
+                            ((d.OriginalPrice > 0
+                                ? d.OriginalPrice
+                                : d.Product != null ? d.Product.Price : d.UnitPrice) > d.UnitPrice),
                         TotalPrice = d.Quantity * d.UnitPrice
                     }),
-                    TotalAmount = o.OrderDetails.Sum(d => d.Quantity * d.UnitPrice)
+                    TotalAmount = o.TotalAmount > 0
+                        ? o.TotalAmount
+                        : o.OrderDetails.Sum(d => d.Quantity * d.UnitPrice)
                 })
                 .ToList();
 

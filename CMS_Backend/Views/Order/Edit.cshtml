@@ -1,59 +1,79 @@
-﻿@model CMS.Data.Entities.Order
+@model CMS.Data.Entities.Order
 
 @{
     Layout = "_LayoutAdmin";
 }
 
-<h2>Sửa đơn hàng</h2>
+<h2>Sửa đơn hàng #@Model.Id</h2>
 
 <form asp-action="Edit" method="post">
-
     @Html.AntiForgeryToken()
-
     <input type="hidden" asp-for="Id" />
 
-    <div class="mb-3">
-        <label class="form-label">Khách hàng</label>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Khách hàng</label>
+            <select asp-for="CustomerId" asp-items="ViewBag.Customers" class="form-control"></select>
+        </div>
 
-        <select asp-for="CustomerId"
-                asp-items="ViewBag.Customers"
-                class="form-control">
-        </select>
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Ngày đặt hàng</label>
+            <input asp-for="OrderDate" type="datetime-local" class="form-control" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Người nhận</label>
+            <input asp-for="ReceiverName" class="form-control" />
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Email nhận đơn</label>
+            <input asp-for="ReceiverEmail" class="form-control" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Số điện thoại</label>
+            <input asp-for="ReceiverPhone" class="form-control" />
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Phương thức thanh toán</label>
+            <input asp-for="PaymentMethod" class="form-control" />
+        </div>
     </div>
 
     <div class="mb-3">
-        <label class="form-label">Ngày đặt hàng</label>
-
-        <input asp-for="OrderDate"
-               type="datetime-local"
-               class="form-control" />
+        <label class="form-label">Địa chỉ giao hàng</label>
+        <textarea asp-for="ShippingAddress" class="form-control" rows="3"></textarea>
     </div>
 
-    <div class="mb-3">
-        <label class="form-label">Trạng thái</label>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Trạng thái</label>
+            <select asp-for="Status" class="form-control">
+                <option value="0">Chờ duyệt</option>
+                <option value="1">Đã duyệt / Đang giao</option>
+                <option value="2">Hoàn thành</option>
+                <option value="3">Từ chối</option>
+            </select>
+        </div>
 
-        <select asp-for="Status" class="form-control">
-            <option value="0">Chờ duyệt</option>
-            <option value="1">Đang giao</option>
-            <option value="2">Hoàn thành</option>
-        </select>
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Phí vận chuyển</label>
+            <input asp-for="ShippingFee" type="number" min="0" class="form-control" />
+        </div>
     </div>
 
     <div class="mb-3">
         <label class="form-label">Ghi chú</label>
-
-        <textarea asp-for="Notes"
-                  class="form-control"
-                  rows="4"></textarea>
+        <textarea asp-for="Notes" class="form-control" rows="4"></textarea>
     </div>
 
-    <button type="submit" class="btn btn-primary">
-        Cập nhật
-    </button>
-
-    <a asp-action="Index"
-       class="btn btn-secondary">
-        Quay lại
-    </a>
-
+    <button type="submit" class="btn btn-primary">Cập nhật</button>
+    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-info">Chi tiết</a>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
 </form>

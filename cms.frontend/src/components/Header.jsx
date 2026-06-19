@@ -1,13 +1,17 @@
 ﻿import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import axiosClient from "../api/axiosClient";
 
 function Header() {
     const [customer, setCustomer] = useState(null);
     const [cartCount, setCartCount] = useState(0);
     const [keyword, setKeyword] = useState("");
+    const [categories, setCategories] = useState([]);
     const navigate = useNavigate();
+
     useEffect(() => {
         loadData();
+        loadCategories();
 
         window.addEventListener("storage", loadData);
         window.addEventListener("cartUpdated", loadData);
@@ -19,6 +23,21 @@ function Header() {
             window.removeEventListener("customerUpdated", loadData);
         };
     }, []);
+
+    useEffect(() => {
+        const searchText = keyword.trim();
+
+        if (!searchText) return;
+
+        const timer = setTimeout(() => {
+            navigate(
+                `/search?keyword=${encodeURIComponent(searchText)}`
+            );
+        }, 350);
+
+        return () => clearTimeout(timer);
+    }, [keyword, navigate]);
+
     const loadData = () => {
         const customerData = JSON.parse(
             localStorage.getItem("customer")
@@ -37,8 +56,19 @@ function Header() {
         setCartCount(totalQuantity);
     };
 
+    const loadCategories = () => {
+        axiosClient
+            .get("/CategoriesProducts")
+            .then((res) => setCategories(res.data))
+            .catch((err) => {
+                console.error("Lỗi tải danh mục sản phẩm:", err);
+                setCategories([]);
+            });
+    };
+
     const handleLogout = () => {
         localStorage.removeItem("customer");
+        localStorage.removeItem("redirectAfterLogin");
 
         setCustomer(null);
 
@@ -51,13 +81,16 @@ function Header() {
             `/search?keyword=${encodeURIComponent(keyword)}`
         );
     };
+    const handleSearchChange = (e) => {
+        setKeyword(e.target.value);
+    };
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {
             handleSearch();
         }
     };
     return (
-        <>
+        <div className="site-sticky-header">
             <div className="top-banner">
                 ✨ LOI Cosmetics - Mỹ phẩm chính hãng, chăm sóc vẻ đẹp mỗi ngày ✨
             </div>
@@ -75,7 +108,7 @@ function Header() {
                     <div className="search-box">
                         <input
                             value={keyword}
-                            onChange={(e) => setKeyword(e.target.value)}
+                            onChange={handleSearchChange}
                             onKeyDown={handleKeyDown}
                             placeholder="Tìm serum, kem chống nắng, sữa rửa mặt..."
                         />
@@ -99,6 +132,11 @@ function Header() {
                                 </div>
 
                                 <div className="dropdown-menu-custom">
+
+                                    <Link to="/profile">
+                                        Hồ sơ cá nhân
+                                    </Link>
+
                                     <Link to="/orders">
                                         Lịch sử mua hàng
                                     </Link>
@@ -109,6 +147,7 @@ function Header() {
                                     >
                                         Đăng xuất
                                     </button>
+
                                 </div>
                             </div>
                         ) : (
@@ -145,11 +184,34 @@ function Header() {
                     <Link to="/">Trang chủ</Link>
                     <Link to="/shop">Sản phẩm</Link>
                     <Link to="/promotions">Khuyến mãi</Link>
-                    <Link to="/brands">Thương hiệu</Link>
+                    <div className="nav-dropdown">
+                        <Link to="/shop" className="nav-dropdown-label">
+                            Danh mục
+                        </Link>
+
+                        <div className="nav-dropdown-menu">
+                            {categories.length > 0 ? (
+                                categories.map((cat) => (
+                                    <Link
+                                        key={cat.id}
+                                        to={`/shop?category=${cat.id}`}
+                                    >
+                                        <span>{cat.name}</span>
+                                        <small>{cat.description || "Xem sản phẩm"}</small>
+                                    </Link>
+                                ))
+                            ) : (
+                                <Link to="/shop">
+                                    <span>Tất cả sản phẩm</span>
+                                    <small>Xem danh sách sản phẩm</small>
+                                </Link>
+                            )}
+                        </div>
+                    </div>
                     <Link to="/blog">Cẩm nang làm đẹp</Link>
                 </div>
             </nav>
-        </>
+        </div>
     );
 }
 

@@ -2,9 +2,12 @@
 import { Link } from "react-router-dom";
 import axiosClient from "../api/axiosClient";
 import { IMAGE_BASE_URL } from "../config";
+import { getShortPlainText } from "../utils/postText";
 
 function Blog() {
     const [posts, setPosts] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [activeCategory, setActiveCategory] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
 
     const pageSize = 6;
@@ -19,11 +22,45 @@ function Blog() {
         return `${IMAGE_BASE_URL}${imageUrl}`;
     };
 
-    useEffect(() => {
+    const loadAllPosts = () => {
         axiosClient
             .get("/Posts")
-            .then((res) => setPosts(res.data))
+            .then((res) => {
+                setPosts(res.data);
+                setActiveCategory(0);
+                setCurrentPage(1);
+            })
             .catch((err) => console.log("Lỗi lấy bài viết:", err));
+    };
+
+    const loadPostsByCategory = (categoryId) => {
+        const id = Number(categoryId);
+
+        if (id === 0) {
+            loadAllPosts();
+            return;
+        }
+
+        axiosClient
+            .get(`/Posts/category/${id}`)
+            .then((res) => {
+                setPosts(res.data);
+                setActiveCategory(id);
+                setCurrentPage(1);
+            })
+            .catch((err) => {
+                console.log("Lỗi lọc bài viết theo danh mục:", err);
+                setPosts([]);
+            });
+    };
+
+    useEffect(() => {
+        axiosClient
+            .get("/Categories")
+            .then((res) => setCategories(res.data))
+            .catch((err) => console.log("Lỗi lấy danh mục bài viết:", err));
+
+        loadAllPosts();
     }, []);
 
     const totalPages = Math.ceil(posts.length / pageSize);
@@ -48,10 +85,33 @@ function Blog() {
                             Tổng hợp các bài viết chăm sóc da và mỹ phẩm.
                         </p>
                     </div>
+
+                    <div className="blog-category-filter">
+                        <label>Danh mục</label>
+                        <select
+                            value={activeCategory}
+                            onChange={(e) => loadPostsByCategory(e.target.value)}
+                        >
+                            <option value={0}>Tất cả danh mục</option>
+
+                            {categories.map((cat) => (
+                                <option key={cat.id} value={cat.id}>
+                                    {cat.name}
+                                    {cat.postCount > 0 ? ` (${cat.postCount})` : ""}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
 
-                <div className="blog-grid">
-                    {pagedPosts.map((post) => (
+                {posts.length === 0 ? (
+                    <div className="empty-state">
+                        <h3>Chưa có bài viết trong danh mục này</h3>
+                        <p>Hãy chọn danh mục khác để xem thêm nội dung làm đẹp.</p>
+                    </div>
+                ) : (
+                    <div className="blog-grid">
+                        {pagedPosts.map((post) => (
                         <article
                             className="blog-card"
                             key={post.id}
@@ -79,11 +139,11 @@ function Blog() {
                                 <h3>{post.title}</h3>
 
                                 <p>
-                                    {post.content
-                                        ? post.content
-                                            .replace(/<[^>]+>/g, "")
-                                            .substring(0, 120) + "..."
-                                        : "Cập nhật kiến thức làm đẹp và chăm sóc da."}
+                                    {getShortPlainText(
+                                        post.content,
+                                        120,
+                                        "Cập nhật kiến thức làm đẹp và chăm sóc da."
+                                    )}
                                 </p>
 
                                 <Link
@@ -94,8 +154,9 @@ function Blog() {
                                 </Link>
                             </div>
                         </article>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                )}
 
                 {totalPages > 1 && (
                     <div className="pagination">

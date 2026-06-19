@@ -1,12 +1,19 @@
 ﻿@model CMS.Data.Entities.Post
 
+@{
+    Layout = "_LayoutAdmin";
+}
+
 <div class="container mt-4">
     <div class="card shadow">
 
-        <img src="@Model.ImageUrl"
-             style="height:450px; object-fit:cover;"
-             class="card-img-top"
-             alt="@Model.Title" />
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <img src="@Model.ImageUrl"
+                 style="height:450px; object-fit:cover;"
+                 class="card-img-top"
+                 alt="@Model.Title" />
+        }
 
         <div class="card-body">
             <h2>@Model.Title</h2>
@@ -23,9 +30,9 @@
 
             <hr />
 
-            <p style="font-size:18px; line-height:1.8;">
-                @Model.Content
-            </p>
+            <div class="post-content">
+                @Html.Raw(Model.Content)
+            </div>
 
             <a asp-controller="Post"
                asp-action="Index"
@@ -35,3 +42,22 @@
         </div>
     </div>
 </div>
+
+<style>
+    .post-content {
+        font-size: 18px;
+        line-height: 1.8;
+    }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto !important;
+            display: block;
+            margin: 20px auto;
+            border-radius: 12px;
+        }
+
+        .post-content p {
+            margin-bottom: 15px;
+        }
+</style>

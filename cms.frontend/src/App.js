@@ -16,6 +16,8 @@ import BlogDetail from "./pages/BlogDetail";
 import Blog from "./pages/Blog";
 import Search from "./pages/Search";
 import ForgotPassword from "./pages/ForgotPassword";
+import Profile from "./pages/Profile";
+import Promotions from "./pages/Promotions";
 function App() {
     return (
         <>
@@ -34,6 +36,8 @@ function App() {
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/search" element={<Search />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/promotions" element={<Promotions />} />
 
             </Routes>
 

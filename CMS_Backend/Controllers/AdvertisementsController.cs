@@ -1,10 +1,12 @@
 ﻿using CMS.Data;
 using CMS.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CMS_Backend.Controllers
 {
+    [Authorize]
     public class AdvertisementsController : Controller
     {
         private readonly ApplicationDbContext _context;

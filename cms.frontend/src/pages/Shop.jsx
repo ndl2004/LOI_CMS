@@ -1,4 +1,5 @@
 ﻿import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import axiosClient from "../api/axiosClient";
 import ProductCard from "../components/ProductCard";
 
@@ -10,14 +11,51 @@ function Shop() {
 
     const [minPrice, setMinPrice] = useState("");
     const [maxPrice, setMaxPrice] = useState("");
+    const [searchKeyword, setSearchKeyword] = useState("");
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const pageSize = 8;
+
+    const loadFilteredProducts = ({
+        keyword = searchKeyword,
+        min = minPrice,
+        max = maxPrice,
+        categoryId = activeCategory,
+    } = {}) => {
+        const params = {};
+
+        if (keyword.trim()) {
+            params.keyword = keyword.trim();
+        }
+
+        if (min !== "") {
+            params.minPrice = Number(min);
+        }
+
+        if (max !== "") {
+            params.maxPrice = Number(max);
+        }
+
+        if (categoryId > 0) {
+            params.categoryProductId = categoryId;
+        }
+
+        axiosClient
+            .get("/Products/filter", { params })
+            .then((res) => setProducts(res.data))
+            .catch((err) => {
+                console.error("Lỗi lọc sản phẩm:", err);
+                alert("Lọc sản phẩm thất bại. Vui lòng kiểm tra lại thông tin nhập.");
+            });
+    };
 
     const loadAllProducts = () => {
         setActiveCategory(0);
         setCurrentPage(1);
         setMinPrice("");
         setMaxPrice("");
+        setSearchKeyword("");
+        setSearchParams({});
 
         axiosClient.get("/Products").then((res) => setProducts(res.data));
     };
@@ -27,33 +65,53 @@ function Shop() {
         setCurrentPage(1);
         setMinPrice("");
         setMaxPrice("");
+        setSearchKeyword("");
+        setSearchParams(id > 0 ? { category: String(id) } : {});
 
-        axiosClient
-            .get(`/Products/category/${id}`)
-            .then((res) => setProducts(res.data));
+        loadFilteredProducts({
+            keyword: "",
+            min: "",
+            max: "",
+            categoryId: id,
+        });
+    };
+
+    const handleSearchKeywordChange = (e) => {
+        const value = e.target.value;
+
+        setSearchKeyword(value);
+        setCurrentPage(1);
+
+        loadFilteredProducts({
+            keyword: value,
+        });
+    };
+
+    const handleMinPriceChange = (e) => {
+        const value = e.target.value;
+
+        setMinPrice(value);
+        setCurrentPage(1);
+
+        loadFilteredProducts({
+            min: value,
+        });
+    };
+
+    const handleMaxPriceChange = (e) => {
+        const value = e.target.value;
+
+        setMaxPrice(value);
+        setCurrentPage(1);
+
+        loadFilteredProducts({
+            max: value,
+        });
     };
 
     const handleFilterPrice = () => {
-        setActiveCategory(0);
         setCurrentPage(1);
-
-        const params = {};
-
-        if (minPrice !== "") {
-            params.minPrice = Number(minPrice);
-        }
-
-        if (maxPrice !== "") {
-            params.maxPrice = Number(maxPrice);
-        }
-
-        axiosClient
-            .get("/Products/filter-price", { params })
-            .then((res) => setProducts(res.data))
-            .catch((err) => {
-                console.error("Lỗi lọc giá:", err);
-                alert("Lọc giá thất bại. Vui lòng kiểm tra lại giá nhập.");
-            });
+        loadFilteredProducts();
     };
 
     const resetFilter = () => {
@@ -62,8 +120,35 @@ function Shop() {
 
     useEffect(() => {
         axiosClient.get("/CategoriesProducts").then((res) => setCategories(res.data));
-        loadAllProducts();
     }, []);
+
+    useEffect(() => {
+        const categoryId = Number(searchParams.get("category")) || 0;
+
+        setCurrentPage(1);
+
+        if (categoryId > 0) {
+            setActiveCategory(categoryId);
+            setMinPrice("");
+            setMaxPrice("");
+            setSearchKeyword("");
+
+            axiosClient
+                .get("/Products/filter", {
+                    params: { categoryProductId: categoryId },
+                })
+                .then((res) => setProducts(res.data))
+                .catch((err) => {
+                    console.error("Lỗi lọc sản phẩm theo danh mục:", err);
+                    setProducts([]);
+                });
+
+            return;
+        }
+
+        setActiveCategory(0);
+        axiosClient.get("/Products").then((res) => setProducts(res.data));
+    }, [searchParams]);
 
     const totalPages = Math.ceil(products.length / pageSize);
 
@@ -103,12 +188,22 @@ function Shop() {
                 </div>
 
                 <div className="price-filter">
+                    <div className="shop-live-search">
+                        <label>Tìm sản phẩm</label>
+                        <input
+                            type="text"
+                            value={searchKeyword}
+                            onChange={handleSearchKeywordChange}
+                            placeholder="Nhập tên sản phẩm..."
+                        />
+                    </div>
+
                     <div>
                         <label>Giá từ</label>
                         <input
                             type="number"
                             value={minPrice}
-                            onChange={(e) => setMinPrice(e.target.value)}
+                            onChange={handleMinPriceChange}
                             placeholder="0"
                         />
                     </div>
@@ -118,7 +213,7 @@ function Shop() {
                         <input
                             type="number"
                             value={maxPrice}
-                            onChange={(e) => setMaxPrice(e.target.value)}
+                            onChange={handleMaxPriceChange}
                             placeholder="500000"
                         />
                     </div>
@@ -140,9 +235,17 @@ function Shop() {
                 </div>
 
                 {products.length === 0 ? (
-                    <div className="empty-search">
-                        <div className="empty-icon">🔍</div>
+                    <div className="empty-state">
+                        <img
+                            src="https://cdn-icons-png.flaticon.com/512/6134/6134065.png"
+                            alt="Không tìm thấy sản phẩm"
+                        />
+
                         <h3>Không tìm thấy sản phẩm nào phù hợp với tiêu chí của bạn</h3>
+
+                        <p>
+                            Hãy thử thay đổi khoảng giá hoặc chọn danh mục khác.
+                        </p>
                     </div>
                 ) : (
                     <>

@@ -19,10 +19,19 @@ namespace CMS.Data.Entities
 
         public int ProductId { get; set; }
 
+        public string? ProductName { get; set; }
+
         public int Quantity { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal UnitPrice { get; set; } // Giá tại thời điểm mua
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal OriginalPrice { get; set; }
+
+        public int DiscountPercent { get; set; }
+
+        public bool IsFlashSale { get; set; }
 
         [ForeignKey("OrderId")]
         public virtual Order? Order { get; set; }

@@ -78,57 +78,74 @@ function Cart() {
                                                 <h3>{item.name}</h3>
 
                                                 <p className="cart-price">
+                                                    {item.isFlashDeal && item.originalPrice && (
+                                                        <span className="cart-old-price">
+                                                            {Number(item.originalPrice).toLocaleString("vi-VN")} đ
+                                                        </span>
+                                                    )}
                                                     {Number(item.price).toLocaleString(
                                                         "vi-VN"
                                                     )}{" "}
                                                     đ
                                                 </p>
 
-                                                <button
-                                                    className="cart-remove-mobile"
-                                                    onClick={() => removeItem(item.id)}
-                                                >
-                                                    Xóa sản phẩm
-                                                </button>
+                                                {item.isFlashDeal && (
+                                                    <span className="cart-sale-note">
+                                                        Flash Sale -{item.discountPercent}%
+                                                    </span>
+                                                )}
+
                                             </div>
                                         </div>
 
-                                        <div className="cart-quantity">
-                                            <button
-                                                onClick={() =>
-                                                    updateQuantity(
-                                                        item.id,
-                                                        item.quantity - 1
-                                                    )
-                                                }
-                                            >
-                                                -
-                                            </button>
+                                        <div className="cart-item-actions">
+                                            <div className="cart-action-label">
+                                                Số lượng
+                                            </div>
 
-                                            <input value={item.quantity} readOnly />
+                                            <div className="cart-quantity">
+                                                <button
+                                                    type="button"
+                                                    aria-label="Giảm số lượng"
+                                                    onClick={() =>
+                                                        updateQuantity(
+                                                            item.id,
+                                                            item.quantity - 1
+                                                        )
+                                                    }
+                                                >
+                                                    -
+                                                </button>
+
+                                                <input value={item.quantity} readOnly />
+
+                                                <button
+                                                    type="button"
+                                                    aria-label="Tăng số lượng"
+                                                    onClick={() =>
+                                                        updateQuantity(
+                                                            item.id,
+                                                            item.quantity + 1
+                                                        )
+                                                    }
+                                                >
+                                                    +
+                                                </button>
+                                            </div>
 
                                             <button
-                                                onClick={() =>
-                                                    updateQuantity(
-                                                        item.id,
-                                                        item.quantity + 1
-                                                    )
-                                                }
+                                                type="button"
+                                                className="btn-remove"
+                                                onClick={() => removeItem(item.id)}
                                             >
-                                                +
+                                                Xóa khỏi giỏ
                                             </button>
                                         </div>
 
                                         <div className="cart-item-total">
+                                            <span>Thành tiền</span>
                                             {itemTotal.toLocaleString("vi-VN")} đ
                                         </div>
-
-                                        <button
-                                            className="btn-remove"
-                                            onClick={() => removeItem(item.id)}
-                                        >
-                                            Xóa
-                                        </button>
                                     </div>
                                 );
                             })}

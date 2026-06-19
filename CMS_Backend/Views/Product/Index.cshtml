@@ -2,12 +2,18 @@
 
 @{
     Layout = "_LayoutAdmin";
+
+    int currentPage = ViewBag.CurrentPage ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
 }
 
 <div class="container mt-4">
 
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="text-primary">DANH SÁCH SẢN PHẨM</h2>
+        <div>
+            <h2 class="text-primary mb-1">DANH SÁCH SẢN PHẨM</h2>
+            <small class="text-muted">Quản lý sản phẩm, tồn kho và danh mục</small>
+        </div>
 
         <a asp-action="Create" class="btn btn-success">
             <i class="bi bi-plus-circle"></i> Thêm sản phẩm mới
@@ -17,13 +23,14 @@
     <table class="table table-bordered table-hover shadow-sm align-middle">
         <thead class="table-light">
             <tr>
-                <th>ID</th>
-                <th>Ảnh</th>
+                <th width="70">ID</th>
+                <th width="110">Ảnh</th>
                 <th>Tên sản phẩm</th>
-                <th>Giá</th>
-                <th>Số lượng tồn</th>
-                <th>Danh mục</th>
-                <th width="180">Thao tác</th>
+                <th width="150">Giá</th>
+                <th width="120">Tồn kho</th>
+                <th width="160">Đã bán</th>
+                <th width="180">Danh mục</th>
+                <th width="190">Thao tác</th>
             </tr>
         </thead>
 
@@ -39,7 +46,7 @@
                             <img src="@item.ImageUrl"
                                  alt="@item.Name"
                                  class="img-thumbnail"
-                                 style="width: 80px; height: 80px; object-fit: cover;" />
+                                 style="width: 82px; height: 82px; object-fit: cover;" />
                         }
                         else
                         {
@@ -56,12 +63,33 @@
                     </td>
 
                     <td>
-                        @item.StockQuantity
-                    </td>
+                        @if (item.StockQuantity <= 0)
+                        {
+                            <span class="badge bg-danger">Hết hàng</span>
+                        }
+                        else if (item.StockQuantity <= 5)
+                        {
+                            <span class="badge bg-warning text-dark">
+                                @item.StockQuantity
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success">
+                                @item.StockQuantity
+                            </span>
+                        }
+                </td>
 
-                    <td>
-                        @item.CategoryProductId
-                    </td>
+                <td>
+                    @item.SoldQuantity
+                </td>
+
+                <td>
+                    @(item.CategoryProduct != null
+                                        ? item.CategoryProduct.Name
+                                        : "Chưa có danh mục")
+                </td>
 
                     <td>
                         <a asp-action="Edit"
@@ -78,8 +106,76 @@
                         </a>
                     </td>
                 </tr>
-            }
+                        }
         </tbody>
     </table>
 
+    @if (totalPages > 1)
+    {
+        <div class="admin-pagination">
+            <a asp-action="Index"
+               asp-route-page="@(currentPage - 1)"
+               class="@(currentPage == 1 ? "disabled" : "")">
+                ← Trước
+            </a>
+
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                <a asp-action="Index"
+                   asp-route-page="@i"
+                   class="@(i == currentPage ? "active" : "")">
+                    @i
+                </a>
+            }
+
+            <a asp-action="Index"
+               asp-route-page="@(currentPage + 1)"
+               class="@(currentPage == totalPages ? "disabled" : "")">
+                Sau →
+            </a>
+        </div>
+    }
 </div>
+
+<style>
+    .admin-pagination {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 28px;
+        flex-wrap: wrap;
+    }
+
+        .admin-pagination a,
+        .admin-pagination span {
+            min-width: 38px;
+            height: 38px;
+            padding: 0 12px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            border: 1px solid #dee2e6;
+            color: #333;
+            background: #fff;
+            font-weight: 600;
+        }
+
+            .admin-pagination a:hover {
+                background: #0d6efd;
+                color: #fff;
+                border-color: #0d6efd;
+            }
+
+        .admin-pagination .active {
+            background: #0d6efd;
+            color: #fff;
+            border-color: #0d6efd;
+        }
+
+        .admin-pagination .disabled {
+            opacity: .45;
+            pointer-events: none;
+        }
+</style>

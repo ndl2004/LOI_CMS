@@ -1,73 +1,54 @@
-﻿@model CMS.Data.Entities.Order
+@model CMS.Data.Entities.Order
 
 @{
     Layout = "_LayoutAdmin";
+    var totalAmount = Model.TotalAmount > 0
+        ? Model.TotalAmount
+        : (Model.OrderDetails?.Sum(d => d.Quantity * d.UnitPrice) ?? 0) + Model.ShippingFee;
 }
 
-<h2 class="text-danger">Xóa đơn hàng</h2>
+<h2 class="text-danger">Xóa đơn hàng #@Model.Id</h2>
 
 <div class="alert alert-danger">
-    Bạn có chắc chắn muốn xóa đơn hàng này không?
+    Bạn có chắc chắn muốn xóa đơn hàng này không? Chi tiết đơn hàng đi kèm cũng sẽ bị xóa.
 </div>
 
 <table class="table table-bordered">
-
-    <tr>
-        <th>ID</th>
-        <td>@Model.Id</td>
-    </tr>
-
     <tr>
         <th>Ngày đặt hàng</th>
         <td>@Model.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
     </tr>
-
     <tr>
         <th>Khách hàng</th>
         <td>@Model.Customer?.FullName</td>
     </tr>
-
     <tr>
-        <th>Trạng thái</th>
-        <td>
-            @switch (Model.Status)
-            {
-                case 0:
-                    <span>Chờ duyệt</span>
-                    break;
-
-                case 1:
-                    <span>Đang giao</span>
-                    break;
-
-                case 2:
-                    <span>Hoàn thành</span>
-                    break;
-            }
-        </td>
+        <th>Người nhận</th>
+        <td>@(Model.ReceiverName ?? Model.Customer?.FullName)</td>
     </tr>
-
+    <tr>
+        <th>Số điện thoại</th>
+        <td>@(Model.ReceiverPhone ?? Model.Customer?.Phone)</td>
+    </tr>
+    <tr>
+        <th>Địa chỉ giao hàng</th>
+        <td>@(Model.ShippingAddress ?? Model.Customer?.Address)</td>
+    </tr>
+    <tr>
+        <th>Tổng tiền</th>
+        <td class="fw-bold text-danger">@totalAmount.ToString("N0") đ</td>
+    </tr>
     <tr>
         <th>Ghi chú</th>
-        <td>@Model.Notes</td>
+        <td>@(Model.Notes ?? "Không có")</td>
     </tr>
-
 </table>
 
 <form asp-action="Delete" method="post">
-
     @Html.AntiForgeryToken()
-
     <input type="hidden" asp-for="Id" />
 
-    <button type="submit"
-            class="btn btn-danger">
-        Xóa
-    </button>
-
-    <a asp-action="Index"
-       class="btn btn-secondary">
-        Hủy
-    </a>
-
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-info">Chi tiết</a>
+    <a asp-action="Index" class="btn btn-secondary">Hủy</a>
 </form>

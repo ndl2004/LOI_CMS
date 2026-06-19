@@ -10,12 +10,41 @@ function Home() {
     const [products, setProducts] = useState([]);
     const [posts, setPosts] = useState([]);
     const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+    const [activeFlashSale, setActiveFlashSale] = useState(null);
+    const [flashCountdown, setFlashCountdown] = useState("00:00:00");
 
     useEffect(() => {
         axiosClient.get("/CategoriesProducts").then((res) => setCategories(res.data));
         axiosClient.get("/Products").then((res) => setProducts(res.data));
         axiosClient.get("/Posts").then((res) => setPosts(res.data));
+        axiosClient.get("/FlashSales/active").then((res) => setActiveFlashSale(res.data));
     }, []);
+
+    useEffect(() => {
+        if (!activeFlashSale?.endTime) {
+            setFlashCountdown("00:00:00");
+            return;
+        }
+
+        const updateCountdown = () => {
+            const endTime = new Date(activeFlashSale.endTime).getTime();
+            const remaining = Math.max(0, endTime - Date.now());
+            const hours = Math.floor(remaining / (1000 * 60 * 60));
+            const minutes = Math.floor((remaining / (1000 * 60)) % 60);
+            const seconds = Math.floor((remaining / 1000) % 60);
+
+            setFlashCountdown(
+                [hours, minutes, seconds]
+                    .map((value) => value.toString().padStart(2, "0"))
+                    .join(":")
+            );
+        };
+
+        updateCountdown();
+        const timerId = setInterval(updateCountdown, 1000);
+
+        return () => clearInterval(timerId);
+    }, [activeFlashSale]);
 
     const getSoldCount = (product) => {
         return (
@@ -46,6 +75,10 @@ function Home() {
     const selectedCategory = categories.find(
         (cat) => cat.id === selectedCategoryId
     );
+    const newestProducts = [...products]
+        .sort((a, b) => b.id - a.id)
+        .slice(0, 3);
+    const flashSaleItems = activeFlashSale?.items || [];
 
     return (
         <>
@@ -162,28 +195,58 @@ function Home() {
                         )}
                     </div>
                 </section>
-
-                <section className="section-box flash-section">
-                    <div className="flash-header">
-                        <h2>Flash Deals</h2>
-
-                        <div className="flash-timer">
-                            <span>Ưu đãi kết thúc sau</span>
-                            <strong>02:59:59</strong>
-                        </div>
+                <section className="section-box">
+                    <div className="section-head">
+                        <h2>Sản phẩm mới nhất</h2>
+                        <a href="/shop">Xem tất cả</a>
                     </div>
 
                     <div className="product-grid">
-                        {products.slice(0, 4).map((item) => (
+                        {newestProducts.map((item) => (
                             <ProductCard
                                 key={item.id}
                                 product={item}
-                                isFlashDeal={true}
-                                discountPercent={20}
+                                tag="NEW"
                             />
                         ))}
                     </div>
                 </section>
+                {flashSaleItems.length > 0 && (
+                    <section className="section-box flash-section">
+                        <div className="flash-header">
+                            <h2>{activeFlashSale?.name || "Flash Deals"}</h2>
+
+                            <div className="flash-timer">
+                                <span>Ưu đãi kết thúc sau</span>
+                                <strong>{flashCountdown}</strong>
+                            </div>
+
+                            <a className="flash-more-link" href="/promotions">
+                                Xem thêm khuyến mãi
+                            </a>
+                        </div>
+
+                        <div className="product-grid">
+                            {flashSaleItems.slice(0, 4).map((item) => (
+                                <ProductCard
+                                    key={item.id}
+                                    product={{
+                                        id: item.productId,
+                                        name: item.name,
+                                        price: item.price,
+                                        imageUrl: item.imageUrl,
+                                        soldQuantity: item.productSoldQuantity,
+                                    }}
+                                    isFlashDeal={true}
+                                    discountPercent={item.discountPercent}
+                                    isSoldOut={item.isSoldOut}
+                                    saleQuantity={item.saleQuantity}
+                                    remainingQuantity={item.remainingQuantity}
+                                />
+                            ))}
+                        </div>
+                    </section>
+                )}
 
                 <LatestBlog posts={posts} />
             </div>

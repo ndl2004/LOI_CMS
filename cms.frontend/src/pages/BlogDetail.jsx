@@ -19,6 +19,20 @@ function BlogDetail() {
         return `${IMAGE_BASE_URL}${imageUrl}`;
     };
 
+    const formatContent = (html) => {
+        if (!html) return "Bài viết chưa có nội dung chi tiết.";
+
+        return html
+            .replaceAll(
+                'src="/uploads/',
+                `src="${IMAGE_BASE_URL}/uploads/`
+            )
+            .replaceAll(
+                "src='/uploads/",
+                `src='${IMAGE_BASE_URL}/uploads/`
+            );
+    };
+
     useEffect(() => {
         axiosClient
             .get(`/Posts/${id}`)
@@ -52,13 +66,13 @@ function BlogDetail() {
                 />
 
                 <div
-                    className="blog-content"
+                    className="blog-content blog-detail-content"
                     dangerouslySetInnerHTML={{
-                        __html:
+                        __html: formatContent(
                             post.content ||
                             post.description ||
-                            post.summary ||
-                            "Bài viết chưa có nội dung chi tiết.",
+                            post.summary
+                        ),
                     }}
                 />
 

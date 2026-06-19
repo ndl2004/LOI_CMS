@@ -11,6 +11,7 @@
  * - Truyền dữ liệu sang View để hiển thị cho người dùng
  */
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CMS.Data;
@@ -20,6 +21,7 @@ namespace CMS.Backend.Controllers
     /// <summary>
     /// Controller xử lý các chức năng của trang chủ
     /// </summary>
+    [Authorize]
     public class HomeController : Controller
     {
         // Biến kết nối Database

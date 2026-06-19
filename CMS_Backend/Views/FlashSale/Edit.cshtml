@@ -1,0 +1,146 @@
+@model CMS.Data.Entities.FlashSale
+
+@{
+    Layout = "_LayoutAdmin";
+}
+
+<h2>Chỉnh sửa Flash Sale</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+<form asp-action="Edit" method="post" class="mb-4">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label class="form-label">Tên chương trình</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Thời gian bắt đầu</label>
+            <input asp-for="StartTime" type="datetime-local" class="form-control" />
+            <span asp-validation-for="StartTime" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Thời gian kết thúc</label>
+            <input asp-for="EndTime" type="datetime-local" class="form-control" />
+            <span asp-validation-for="EndTime" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="IsActive" class="form-check-input" />
+        <label class="form-check-label">Kích hoạt</label>
+    </div>
+
+    <button type="submit" class="btn btn-success">Cập nhật chương trình</button>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</form>
+
+<hr />
+
+<h4>Thêm nhiều sản phẩm vào Flash Sale</h4>
+
+<form asp-action="AddItems" method="post" class="row g-3 mb-4">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="flashSaleId" value="@Model.Id" />
+
+    <div class="col-md-5">
+        <label class="form-label">Chọn sản phẩm</label>
+        <select name="productIds" asp-items="ViewBag.Products" multiple class="form-select" size="8"></select>
+        <small class="text-muted">Giữ Ctrl để chọn nhiều sản phẩm.</small>
+    </div>
+
+    <div class="col-md-2">
+        <label class="form-label">Giảm (%)</label>
+        <input type="number" name="discountPercent" class="form-control" min="1" max="100" value="20" />
+    </div>
+
+    <div class="col-md-2">
+        <label class="form-label">Số lượng sale</label>
+        <input type="number" name="saleQuantity" class="form-control" min="0" value="0" />
+        <small class="text-muted">0 = không giới hạn.</small>
+    </div>
+
+    <div class="col-md-3 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100">
+            Thêm sản phẩm
+        </button>
+    </div>
+</form>
+
+<h4>Sản phẩm đang trong chương trình</h4>
+
+<table class="table table-bordered table-hover align-middle">
+    <thead class="table-light">
+        <tr>
+            <th>Sản phẩm</th>
+            <th>Giá gốc</th>
+            <th>Giảm (%)</th>
+            <th>Giá sale</th>
+            <th>Số lượng sale</th>
+            <th>Đã bán</th>
+            <th>Tồn kho</th>
+            <th width="190">Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.FlashSaleItems ?? new List<CMS.Data.Entities.FlashSaleItem>())
+        {
+            var price = item.Product?.Price ?? 0;
+            var salePrice = price - (price * item.DiscountPercent / 100);
+            var updateFormId = $"update-flash-item-{item.Id}";
+
+            <tr>
+                <td>@item.Product?.Name</td>
+                <td>@price.ToString("N0") đ</td>
+                <td>
+                    <input form="@updateFormId" type="number" name="discountPercent" class="form-control form-control-sm" min="1" max="100" value="@item.DiscountPercent" />
+                </td>
+                <td class="text-danger fw-bold">@salePrice.ToString("N0") đ</td>
+                <td>
+                    <input form="@updateFormId" type="number" name="saleQuantity" class="form-control form-control-sm" min="0" value="@item.SaleQuantity" />
+                    <small class="text-muted">0 = không giới hạn</small>
+                </td>
+                <td>@item.SoldQuantity</td>
+                <td>@(item.Product?.StockQuantity ?? 0)</td>
+                <td>
+                    <form id="@updateFormId" asp-action="UpdateItem" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@item.Id" />
+                    </form>
+
+                    <button form="@updateFormId" type="submit" class="btn btn-warning btn-sm mb-1">
+                        Cập nhật
+                    </button>
+
+                    <form asp-action="RemoveItem" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@item.Id" />
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            Xóa
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

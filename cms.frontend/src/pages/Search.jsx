@@ -10,10 +10,17 @@ function Search() {
     const keyword = searchParams.get("keyword");
 
     useEffect(() => {
-        if (!keyword) return;
+        if (!keyword) {
+            setProducts([]);
+            return;
+        }
 
         axiosClient
-            .get(`/Products/search?keyword=${keyword}`)
+            .get("/Products/search", {
+                params: {
+                    keyword,
+                },
+            })
             .then((res) => setProducts(res.data))
             .catch(console.error);
 
@@ -35,16 +42,17 @@ function Search() {
                 </div>
 
                 {products.length === 0 ? (
-                    <div className="empty-search">
+                    <div className="empty-state">
                         <img
-                            src="https://cdn-icons-png.flaticon.com/512/7486/7486740.png"
-                            width="150"
-                            alt=""
+                            src="https://cdn-icons-png.flaticon.com/512/6134/6134065.png"
+                            alt="Không tìm thấy sản phẩm"
                         />
 
-                        <h3>
-                            Không tìm thấy sản phẩm nào phù hợp với tiêu chí của bạn
-                        </h3>
+                        <h3>Không tìm thấy sản phẩm nào phù hợp với tiêu chí của bạn</h3>
+
+                        <p>
+                            Hãy thử tìm kiếm bằng từ khóa khác.
+                        </p>
                     </div>
                 ) : (
                     <div className="product-grid">

@@ -1,23 +1,25 @@
-﻿@model IEnumerable<CMS.Data.Entities.OrderDetail>
+@model IEnumerable<CMS.Data.Entities.OrderDetail>
 
 @{
     Layout = "_LayoutAdmin";
 }
 
 <div class="container mt-4">
-
     <h2 class="text-primary mb-4">
-        DANH SÁCH CHI TIẾT ĐƠN HÀNG
+        Danh sách chi tiết đơn hàng
     </h2>
 
-    <table class="table table-bordered table-hover shadow-sm">
+    <table class="table table-bordered table-hover shadow-sm align-middle">
         <thead class="table-light">
             <tr>
                 <th>ID</th>
-                <th>Mã đơn hàng</th>
+                <th>Mã đơn</th>
+                <th>Người nhận</th>
                 <th>Sản phẩm</th>
                 <th>Số lượng</th>
+                <th>Giá gốc</th>
                 <th>Đơn giá</th>
+                <th>Khuyến mãi</th>
                 <th>Thành tiền</th>
             </tr>
         </thead>
@@ -25,32 +27,42 @@
         <tbody>
             @foreach (var item in Model)
             {
+                var originalPrice = item.OriginalPrice > 0
+                    ? item.OriginalPrice
+                    : item.Product?.Price ?? item.UnitPrice;
+                var hasDiscount = item.IsFlashSale || originalPrice > item.UnitPrice;
+
                 <tr>
                     <td>@item.Id</td>
-
                     <td>
-                        #@item.OrderId
+                        <a asp-controller="Order" asp-action="Details" asp-route-id="@item.OrderId">
+                            #@item.OrderId
+                        </a>
                     </td>
-
+                    <td>@(item.Order?.ReceiverName ?? item.Order?.Customer?.FullName)</td>
+                    <td>@(item.ProductName ?? item.Product?.Name)</td>
+                    <td>@item.Quantity</td>
+                    <td>@originalPrice.ToString("N0") đ</td>
+                    <td>@item.UnitPrice.ToString("N0") đ</td>
                     <td>
-                        @item.Product?.Name
+                        @if (hasDiscount && item.DiscountPercent > 0)
+                        {
+                            <span class="badge bg-danger">Flash Sale -@item.DiscountPercent%</span>
+                        }
+                        else if (hasDiscount)
+                        {
+                            <span class="badge bg-danger">Giá ưu đãi</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted">Không có</span>
+                        }
                     </td>
-
-                    <td>
-                        @item.Quantity
-                    </td>
-
-                    <td>
-                        @item.UnitPrice.ToString("N0") VNĐ
-                    </td>
-
                     <td class="fw-bold text-danger">
-                        @((item.Quantity * item.UnitPrice).ToString("N0")) VNĐ
+                        @((item.Quantity * item.UnitPrice).ToString("N0")) đ
                     </td>
                 </tr>
             }
         </tbody>
-
     </table>
-
 </div>

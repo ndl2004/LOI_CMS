@@ -25,5 +25,7 @@ namespace CMS.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Advertisement> Advertisements { get; set; }
+        public DbSet<FlashSale> FlashSales { get; set; }
+        public DbSet<FlashSaleItem> FlashSaleItems { get; set; }
     }
 }

@@ -15,6 +15,7 @@
 
 using CMS.Data;
 using CMS.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +24,7 @@ namespace CMS.Backend.Controllers
     /// <summary>
     /// Controller quản lý sản phẩm
     /// </summary>
+    [Authorize]
     public class ProductController : Controller
     {
         // Biến kết nối Database
@@ -52,15 +54,27 @@ namespace CMS.Backend.Controllers
         /// Hiển thị toàn bộ sản phẩm trong hệ thống
         /// </summary>
         /// <returns>Danh sách sản phẩm</returns>
-        public IActionResult Index()
+        public IActionResult Index(int page = 1)
         {
-            // Lấy danh sách sản phẩm và danh mục liên quan
+            int pageSize = 8;
+
             var products = _context.Products
                 .Include(p => p.CategoryProduct)
+                .AsQueryable();
+
+            int totalProducts = products.Count();
+            int totalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
+
+            var result = products
+                .OrderByDescending(p => p.Id)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToList();
 
-            // Trả dữ liệu sang View
-            return View(products);
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+
+            return View(result);
         }
 
         // ==================================================

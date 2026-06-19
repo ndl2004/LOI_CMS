@@ -1,5 +1,6 @@
 ﻿import { Link } from "react-router-dom";
 import { IMAGE_BASE_URL } from "../config";
+import { getShortPlainText } from "../utils/postText";
 
 function LatestBlog({ posts }) {
     const getImageUrl = (imageUrl) => {
@@ -15,11 +16,11 @@ function LatestBlog({ posts }) {
     };
 
     const getShortContent = (content) => {
-        if (!content) return "Cập nhật kiến thức làm đẹp, chăm sóc da và lựa chọn mỹ phẩm phù hợp.";
-
-        return content.length > 90
-            ? content.substring(0, 90) + "..."
-            : content;
+        return getShortPlainText(
+            content,
+            90,
+            "Cập nhật kiến thức làm đẹp, chăm sóc da và lựa chọn mỹ phẩm phù hợp."
+        );
     };
 
     return (

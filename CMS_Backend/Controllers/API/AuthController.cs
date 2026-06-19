@@ -244,12 +244,11 @@ namespace CMS_Backend.Controllers.API
 
             return Ok(new
             {
-                message = "Cập nhật hồ sơ thành công",
-                customer.Id,
-                customer.FullName,
-                customer.Email,
-                customer.Phone,
-                customer.Address
+                id = customer.Id,
+                fullName = customer.FullName,
+                email = customer.Email,
+                phone = customer.Phone,
+                address = customer.Address
             });
         }
     }

@@ -21,6 +21,22 @@ namespace CMS.Data.Entities
 
         public int Status { get; set; } // 0: Chờ duyệt, 1: Đang giao, 2: Đã xong
 
+        public string? ReceiverName { get; set; }
+
+        public string? ReceiverEmail { get; set; }
+
+        public string? ReceiverPhone { get; set; }
+
+        public string? ShippingAddress { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal ShippingFee { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal TotalAmount { get; set; }
+
+        public string? PaymentMethod { get; set; }
+
         public string? Notes { get; set; }
 
         [ForeignKey("CustomerId")]

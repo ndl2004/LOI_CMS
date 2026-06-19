@@ -1,84 +1,99 @@
-﻿@model IEnumerable<CMS.Data.Entities.Order>
+@model IEnumerable<CMS.Data.Entities.Order>
 
 @{
     Layout = "_LayoutAdmin";
 }
 
 <div class="container mt-4">
-
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="text-primary">DANH SÁCH ĐƠN HÀNG</h2>
+        <h2 class="text-primary">Danh sách đơn hàng</h2>
 
         <a asp-action="Create" class="btn btn-success">
             <i class="bi bi-plus-circle"></i> Thêm đơn hàng
         </a>
     </div>
 
-    <table class="table table-bordered table-hover shadow-sm">
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    <table class="table table-bordered table-hover shadow-sm align-middle">
         <thead class="table-light">
             <tr>
-                <th>ID</th>
+                <th>Mã đơn</th>
                 <th>Ngày đặt</th>
                 <th>Khách hàng</th>
-                <th>Trạng thái</th>
-                <th>Ghi chú</th>
-                <th width="180">Thao tác</th>
+                <th>Người nhận</th>
+                <th>Số điện thoại</th>
+                <th>Tổng tiền</th>
+                <th width="210">Trạng thái</th>
+                <th width="170">Thao tác</th>
             </tr>
         </thead>
 
         <tbody>
             @foreach (var item in Model)
             {
+                var totalAmount = item.TotalAmount > 0
+                    ? item.TotalAmount
+                    : (item.OrderDetails?.Sum(d => d.Quantity * d.UnitPrice) ?? 0) + item.ShippingFee;
+
                 <tr>
-                    <td>@item.Id</td>
-
+                    <td>#@item.Id</td>
+                    <td>@item.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@item.Customer?.FullName</td>
+                    <td>@(item.ReceiverName ?? item.Customer?.FullName)</td>
+                    <td>@(item.ReceiverPhone ?? item.Customer?.Phone)</td>
+                    <td class="fw-bold text-danger">@totalAmount.ToString("N0") đ</td>
                     <td>
-                        @item.OrderDate.ToString("dd/MM/yyyy")
-                    </td>
-
-                    <td>
-                        @item.Customer?.FullName
-                    </td>
-
-                    <td>
-                        @switch (item.Status)
+                        @if (item.Status == 0)
                         {
-                            case 0:
-                                <span class="badge bg-warning">Chờ duyệt</span>
-                                break;
-
-                            case 1:
-                                <span class="badge bg-primary">Đang giao</span>
-                                break;
-
-                            case 2:
-                                <span class="badge bg-success">Hoàn thành</span>
-                                break;
-
-                            default:
-                                <span class="badge bg-secondary">Không xác định</span>
-                                break;
+                            <form asp-action="ChangeStatus" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                                    <option value="0" selected>Chờ duyệt</option>
+                                    <option value="1">Đã duyệt / Đang giao</option>
+                                    <option value="3">Từ chối</option>
+                                </select>
+                            </form>
+                        }
+                        else if (item.Status == 1)
+                        {
+                            <span class="badge bg-primary">Đã duyệt / Đang giao</span>
+                        }
+                        else if (item.Status == 2)
+                        {
+                            <span class="badge bg-success">Hoàn thành</span>
+                        }
+                        else if (item.Status == 3)
+                        {
+                            <span class="badge bg-danger">Từ chối</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Không xác định</span>
                         }
                     </td>
-
-                    <td>@item.Notes</td>
-
                     <td>
-                        <a asp-action="Edit"
-                           asp-route-id="@item.Id"
-                           class="btn btn-warning btn-sm">
-                            <i class="bi bi-pencil"></i> Sửa
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
+                            Chi tiết
                         </a>
-
-                        <a asp-action="Delete"
-                           asp-route-id="@item.Id"
-                           class="btn btn-danger btn-sm">
-                            <i class="bi bi-trash"></i> Xóa
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
+                            Sửa
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                            Xóa
                         </a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-
 </div>

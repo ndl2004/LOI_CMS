@@ -76,7 +76,12 @@ function Checkout() {
     const handleOrder = async () => {
         if (!customer) {
             alert("Vui lòng đăng nhập trước khi đặt hàng");
-            navigate("/login");
+            localStorage.setItem("redirectAfterLogin", "/checkout");
+            navigate("/login", {
+                state: {
+                    from: "/checkout",
+                },
+            });
             return;
         }
 
@@ -115,7 +120,10 @@ function Checkout() {
             navigate("/orders");
         } catch (err) {
             console.error("Lỗi đặt hàng:", err);
-            alert("Đặt hàng thất bại. Vui lòng kiểm tra tồn kho hoặc thông tin đơn hàng.");
+            alert(
+                err.response?.data?.message ||
+                "Đặt hàng thất bại. Vui lòng kiểm tra tồn kho hoặc thông tin đơn hàng."
+            );
         } finally {
             setLoading(false);
         }
@@ -140,7 +148,17 @@ function Checkout() {
                         <h3>Bạn cần đăng nhập để đặt hàng</h3>
                         <p>Vui lòng đăng nhập tài khoản khách hàng trước khi thanh toán.</p>
 
-                        <Link to="/login" className="checkout-button">
+                        <Link
+                            to="/login"
+                            state={{ from: "/checkout" }}
+                            className="checkout-button"
+                            onClick={() =>
+                                localStorage.setItem(
+                                    "redirectAfterLogin",
+                                    "/checkout"
+                                )
+                            }
+                        >
                             Đăng nhập ngay
                         </Link>
                     </div>
@@ -223,7 +241,19 @@ function Checkout() {
 
                                                 <div className="checkout-product-info">
                                                     <h4>{item.name}</h4>
-                                                    <p>{Number(item.price).toLocaleString("vi-VN")} đ</p>
+                                                    <p>
+                                                        {item.isFlashDeal && item.originalPrice && (
+                                                            <span className="cart-old-price">
+                                                                {Number(item.originalPrice).toLocaleString("vi-VN")} đ
+                                                            </span>
+                                                        )}
+                                                        {Number(item.price).toLocaleString("vi-VN")} đ
+                                                    </p>
+                                                    {item.isFlashDeal && (
+                                                        <span className="cart-sale-note">
+                                                            Flash Sale -{item.discountPercent}%
+                                                        </span>
+                                                    )}
                                                     <span>Số lượng: x{item.quantity}</span>
                                                 </div>
 

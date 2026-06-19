@@ -12,11 +12,13 @@
  */
 
 using CMS.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CMS.Backend.Controllers
 {
+    [Authorize]
     public class OrderDetailController : Controller
     {
         // Biến kết nối Database
@@ -45,6 +47,7 @@ namespace CMS.Backend.Controllers
             // Lấy dữ liệu OrderDetail kèm thông tin Order và Product
             var details = _context.OrderDetails
                 .Include(d => d.Order)
+                .ThenInclude(o => o.Customer)
                 .Include(d => d.Product)
                 .ToList();
 

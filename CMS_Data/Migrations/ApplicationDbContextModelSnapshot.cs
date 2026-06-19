@@ -142,6 +142,65 @@ namespace CMS_Data.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("CMS.Data.Entities.FlashSale", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FlashSales");
+                });
+
+            modelBuilder.Entity("CMS.Data.Entities.FlashSaleItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DiscountPercent")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FlashSaleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SaleQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SoldQuantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FlashSaleId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("FlashSaleItems");
+                });
+
             modelBuilder.Entity("CMS.Data.Entities.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -159,8 +218,29 @@ namespace CMS_Data.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("PaymentMethod")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReceiverEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReceiverName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReceiverPhone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShippingAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("ShippingFee")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -183,8 +263,20 @@ namespace CMS_Data.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
+                    b.Property<string>("ProductName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
+
+                    b.Property<int>("DiscountPercent")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsFlashSale")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("OriginalPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("UnitPrice")
                         .HasColumnType("decimal(18,2)");
@@ -308,6 +400,25 @@ namespace CMS_Data.Migrations
                     b.Navigation("Customer");
                 });
 
+            modelBuilder.Entity("CMS.Data.Entities.FlashSaleItem", b =>
+                {
+                    b.HasOne("CMS.Data.Entities.FlashSale", "FlashSale")
+                        .WithMany("FlashSaleItems")
+                        .HasForeignKey("FlashSaleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CMS.Data.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FlashSale");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("CMS.Data.Entities.OrderDetail", b =>
                 {
                     b.HasOne("CMS.Data.Entities.Order", "Order")
@@ -357,6 +468,11 @@ namespace CMS_Data.Migrations
             modelBuilder.Entity("CMS.Data.Entities.CategoryProduct", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("CMS.Data.Entities.FlashSale", b =>
+                {
+                    b.Navigation("FlashSaleItems");
                 });
 
             modelBuilder.Entity("CMS.Data.Entities.Order", b =>

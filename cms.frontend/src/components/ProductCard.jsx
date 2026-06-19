@@ -6,6 +6,9 @@ function ProductCard({
     tag = "",
     isFlashDeal = false,
     discountPercent = 0,
+    isSoldOut = false,
+    saleQuantity = 0,
+    remainingQuantity = null,
 }) {
     const navigate = useNavigate();
 
@@ -20,6 +23,10 @@ function ProductCard({
         : originalPrice;
 
     const handleBuyNow = () => {
+        if (isSoldOut) {
+            return;
+        }
+
         let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
         const existingItem = cart.find(
@@ -28,13 +35,20 @@ function ProductCard({
 
         if (existingItem) {
             existingItem.quantity += 1;
+            existingItem.price = salePrice;
+            existingItem.originalPrice = originalPrice;
+            existingItem.isFlashDeal = isFlashDeal;
+            existingItem.discountPercent = discountPercent;
         } else {
             cart.push({
                 id: product.id,
                 name: product.name,
                 price: salePrice,
+                originalPrice,
                 imageUrl: product.imageUrl,
                 quantity: 1,
+                isFlashDeal,
+                discountPercent,
             });
         }
 
@@ -45,16 +59,34 @@ function ProductCard({
     };
 
     return (
-        <div className="product-card">
+        <div className={isSoldOut ? "product-card sold-out-card" : "product-card"}>
             {tag && (
-                <span className={tag === "HOT" ? "hot-tag" : "best-tag"}>
-                    {tag === "HOT" ? "🔥 HOT" : "⭐ BEST SELLER"}
+                <span
+                    className={
+                        tag === "HOT"
+                            ? "hot-tag"
+                            : tag === "NEW"
+                                ? "new-tag"
+                                : "best-tag"
+                    }
+                >
+                    {tag === "HOT"
+                        ? "🔥 HOT"
+                        : tag === "NEW"
+                            ? "🆕 NEW"
+                            : "⭐ BEST SELLER"}
                 </span>
             )}
 
             {isFlashDeal && (
                 <span className="sale-tag">
                     -{discountPercent}%
+                </span>
+            )}
+
+            {isSoldOut && (
+                <span className="sold-out-tag">
+                    Hết lượt khuyến mãi
                 </span>
             )}
 
@@ -85,13 +117,27 @@ function ProductCard({
                     Đã bán: {product.soldQuantity || 0}
                 </div>
 
+                {isFlashDeal && (
+                    <div className={isSoldOut ? "flash-stock sold-out" : "flash-stock"}>
+                        {isSoldOut
+                            ? "Hết lượt khuyến mãi"
+                            : saleQuantity === 0
+                                ? "Không giới hạn suất"
+                                : `Còn ${remainingQuantity} suất`}
+                    </div>
+                )}
+
                 <div className="product-actions">
                     <Link className="btn-detail" to={`/product/${product.id}`}>
                         Xem chi tiết
                     </Link>
 
-                    <button className="btn-buy-now" onClick={handleBuyNow}>
-                        Mua ngay
+                    <button
+                        className="btn-buy-now"
+                        onClick={handleBuyNow}
+                        disabled={isSoldOut}
+                    >
+                        {isSoldOut ? "Đã hết" : "Mua ngay"}
                     </button>
                 </div>
             </div>

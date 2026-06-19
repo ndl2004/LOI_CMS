@@ -1,9 +1,10 @@
 ﻿import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axiosClient from "../api/axiosClient";
 
 function Login() {
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [form, setForm] = useState({
         email: "",
@@ -51,7 +52,13 @@ function Login() {
 
             alert("Đăng nhập thành công");
 
-            navigate("/checkout");
+            const redirectPath =
+                location.state?.from ||
+                localStorage.getItem("redirectAfterLogin") ||
+                "/";
+
+            localStorage.removeItem("redirectAfterLogin");
+            navigate(redirectPath, { replace: true });
         }
         catch (err) {
             console.error(err);

@@ -55,23 +55,30 @@ namespace CMS.Backend.Controllers
         /// </summary>
         /// <param name="id">Mã danh mục (không bắt buộc)</param>
         /// <returns>Danh sách bài viết</returns>
-        public IActionResult Index(int? id)
+        public IActionResult Index(int? id, int page = 1)
         {
-            // Lấy danh sách bài viết và danh mục liên quan
+            int pageSize = 6;
+
             var posts = _context.Posts
                 .Include(p => p.Category)
                 .AsQueryable();
 
-            // Nếu có CategoryId thì lọc theo danh mục
             if (id != null)
             {
                 posts = posts.Where(p => p.CategoryId == id);
             }
 
-            // Sắp xếp bài viết mới nhất lên đầu
+            int totalPosts = posts.Count();
+            int totalPages = (int)Math.Ceiling((double)totalPosts / pageSize);
+
             var result = posts
                 .OrderByDescending(p => p.CreatedDate)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToList();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
 
             return View(result);
         }
@@ -268,6 +275,43 @@ namespace CMS.Backend.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public IActionResult UploadEditorImage(IFormFile upload)
+        {
+            if (upload == null || upload.Length == 0)
+            {
+                return Content("<script>alert('Không có file ảnh được upload');</script>", "text/html");
+            }
+
+            string folder = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "wwwroot",
+                "uploads",
+                "posts"
+            );
+
+            if (!Directory.Exists(folder))
+            {
+                Directory.CreateDirectory(folder);
+            }
+
+            string fileName = Guid.NewGuid() + Path.GetExtension(upload.FileName);
+            string filePath = Path.Combine(folder, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                upload.CopyTo(stream);
+            }
+
+            string fileUrl = "/uploads/posts/" + fileName;
+
+            string funcNum = Request.Query["CKEditorFuncNum"];
+
+            return Content(
+                $"<script>window.parent.CKEDITOR.tools.callFunction({funcNum}, '{fileUrl}', 'Upload ảnh thành công');</script>",
+                "text/html"
+            );
         }
     }
 }

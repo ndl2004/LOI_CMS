@@ -61,6 +61,7 @@ namespace CMS_Backend.Controllers.API
                 {
                     p.Id,
                     p.Title,
+                    p.Content,
                     p.ImageUrl,
                     p.CreatedDate,
 
@@ -90,13 +91,20 @@ namespace CMS_Backend.Controllers.API
         {
             // Lọc bài viết theo CategoryId
             var posts = _context.Posts
+                .Include(p => p.Category)
                 .Where(p => p.CategoryId == categoryId)
+                .OrderByDescending(p => p.Id)
                 .Select(p => new
                 {
                     p.Id,
                     p.Title,
+                    p.Content,
                     p.ImageUrl,
-                    p.CreatedDate
+                    p.CreatedDate,
+
+                    CategoryName = p.Category != null
+                        ? p.Category.Name
+                        : "Chưa có danh mục"
                 })
                 .ToList();
 

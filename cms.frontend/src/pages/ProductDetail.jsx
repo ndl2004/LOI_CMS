@@ -30,15 +30,27 @@ function ProductDetail() {
         : "https://via.placeholder.com/500x500?text=LOI+Cosmetics";
 
     const price = Number(product.price);
-    const totalPrice = price * quantity;
+    const flashSale = product.flashSale;
+    const isFlashDeal = Boolean(flashSale);
+    const isFlashSoldOut = flashSale?.isSoldOut;
+    const salePrice = isFlashDeal ? Number(flashSale.salePrice) : price;
+    const totalPrice = salePrice * quantity;
     const stockQuantity = product.stockQuantity || 0;
     const soldQuantity = product.soldQuantity || 0;
+    const maxBuyQuantity =
+        isFlashDeal && flashSale.saleQuantity > 0
+            ? Math.min(stockQuantity, flashSale.remainingQuantity || 0)
+            : stockQuantity;
 
     const increaseQuantity = () => {
-        if (quantity < stockQuantity) {
+        if (quantity < maxBuyQuantity) {
             setQuantity(quantity + 1);
         } else {
-            alert("Số lượng mua không được vượt quá tồn kho");
+            alert(
+                isFlashDeal && flashSale.saleQuantity > 0
+                    ? "Số lượng khuyến mãi còn lại không đủ!"
+                    : "Số lượng sản phẩm trong kho không đủ!"
+            );
         }
     };
 
@@ -54,6 +66,20 @@ function ProductDetail() {
             return;
         }
 
+        if (isFlashSoldOut) {
+            alert("Sản phẩm đã hết lượt khuyến mãi");
+            return;
+        }
+
+        if (quantity > maxBuyQuantity) {
+            alert(
+                isFlashDeal && flashSale.saleQuantity > 0
+                    ? "Số lượng khuyến mãi còn lại không đủ!"
+                    : "Số lượng sản phẩm trong kho không đủ!"
+            );
+            return;
+        }
+
         const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
         const existingItem = cart.find((item) => item.id === product.id);
@@ -61,19 +87,30 @@ function ProductDetail() {
         if (existingItem) {
             const newQuantity = existingItem.quantity + quantity;
 
-            if (newQuantity > stockQuantity) {
-                alert("Số lượng trong giỏ hàng vượt quá tồn kho");
+            if (newQuantity > maxBuyQuantity) {
+                alert(
+                    isFlashDeal && flashSale.saleQuantity > 0
+                        ? "Số lượng khuyến mãi còn lại không đủ!"
+                        : "Số lượng sản phẩm trong kho không đủ!"
+                );
                 return;
             }
 
             existingItem.quantity = newQuantity;
+            existingItem.price = salePrice;
+            existingItem.originalPrice = price;
+            existingItem.isFlashDeal = isFlashDeal;
+            existingItem.discountPercent = flashSale?.discountPercent || 0;
         } else {
             cart.push({
                 id: product.id,
                 name: product.name,
-                price: product.price,
+                price: salePrice,
+                originalPrice: price,
                 imageUrl: product.imageUrl,
                 quantity: quantity,
+                isFlashDeal,
+                discountPercent: flashSale?.discountPercent || 0,
             });
         }
 
@@ -97,9 +134,33 @@ function ProductDetail() {
 
                     <h1>{product.name}</h1>
 
-                    <div className="detail-price">
-                        {price.toLocaleString("vi-VN")} đ
-                    </div>
+                    {isFlashDeal ? (
+                        <div className="detail-sale-box">
+                            <span className="detail-sale-badge">
+                                Flash Sale -{flashSale.discountPercent}%
+                            </span>
+
+                            <div className="detail-old-price">
+                                {price.toLocaleString("vi-VN")} đ
+                            </div>
+
+                            <div className="detail-price">
+                                {salePrice.toLocaleString("vi-VN")} đ
+                            </div>
+
+                            <div className={isFlashSoldOut ? "detail-flash-stock sold-out" : "detail-flash-stock"}>
+                                {isFlashSoldOut
+                                    ? "Hết lượt khuyến mãi"
+                                    : flashSale.saleQuantity === 0
+                                        ? "Không giới hạn suất"
+                                        : `Còn ${flashSale.remainingQuantity} suất khuyến mãi`}
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="detail-price">
+                            {price.toLocaleString("vi-VN")} đ
+                        </div>
+                    )}
 
                     <div className="detail-meta">
                         <span>
@@ -141,8 +202,12 @@ function ProductDetail() {
                     </div>
 
                     <div className="detail-actions">
-                        <button className="btn-add-cart" onClick={addToCart}>
-                            🛒 Thêm vào giỏ hàng
+                        <button
+                            className="btn-add-cart"
+                            onClick={addToCart}
+                            disabled={isFlashSoldOut || stockQuantity <= 0}
+                        >
+                            {isFlashSoldOut ? "Đã hết lượt khuyến mãi" : "🛒 Thêm vào giỏ hàng"}
                         </button>
 
                         <Link to="/shop" className="btn-back-shop">

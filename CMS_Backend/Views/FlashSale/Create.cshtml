@@ -1,0 +1,45 @@
+@model CMS.Data.Entities.FlashSale
+
+@{
+    Layout = "_LayoutAdmin";
+}
+
+<h2>Tạo Flash Sale</h2>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label class="form-label">Tên chương trình</label>
+        <input asp-for="Name" class="form-control" placeholder="Ví dụ: Flash Sale 20h tối nay" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Thời gian bắt đầu</label>
+            <input asp-for="StartTime" type="datetime-local" class="form-control" />
+            <span asp-validation-for="StartTime" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Thời gian kết thúc</label>
+            <input asp-for="EndTime" type="datetime-local" class="form-control" />
+            <span asp-validation-for="EndTime" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="IsActive" class="form-check-input" />
+        <label class="form-check-label">Kích hoạt</label>
+    </div>
+
+    <button type="submit" class="btn btn-success">Lưu và thêm sản phẩm</button>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
